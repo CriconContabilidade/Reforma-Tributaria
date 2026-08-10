@@ -359,6 +359,9 @@
     <div class="info-box">
       <strong>indOp (Indicador de Operação)</strong> é um código de 5 dígitos que diz, para fins de IBS/CBS, <strong>onde</strong> a operação é considerada realizada — e por consequência, qual Município/Estado tem direito ao imposto. Isso importa porque o IBS é cobrado no <strong>destino</strong>, não na origem: para cada tipo de serviço, a lei define um endereço de referência diferente (do imóvel, do prestador, do adquirente, do destinatário, do evento etc.), e é esse endereço que precisa ser identificado corretamente na nota. A base é o <strong>art. 11 da LC 214/2025</strong>.
     </div>
+    <div class="info-box" style="margin-bottom:18px;">
+      <strong>Serviço físico sobre a pessoa (saúde, beleza, estética etc.) tem 4 códigos possíveis</strong> — o que muda é <strong>onde</strong> o atendimento acontece em relação a quem presta e a quem paga: <strong>30101</strong> = no próprio estabelecimento do prestador (ex.: cirurgia no consultório/clínica do médico); <strong>30102</strong> = no endereço de quem contrata/paga (ex.: atendimento a domicílio pago pelo próprio paciente); <strong>30103</strong> = no endereço de quem recebe o serviço, quando é diferente de quem paga (ex.: convênio paga, mas o local é o do paciente); <strong>30104</strong> = em local de terceiros, diferente do prestador, do pagador e do paciente (ex.: cirurgia feita em hospital que não é do médico).
+    </div>
     <input type="text" class="search-box" id="searchIndop" placeholder="Buscar tipo de operação: ex. imóvel, transporte, evento, publicidade...">
     <div id="indopStatus" class="source-link" style="margin-bottom:10px;"></div>
     <div class="card-list" id="listIndop"></div>
@@ -400,6 +403,7 @@ const UPDATE_LOG = [
   {
     date: "10/08/2026",
     changes: [
+      "Aba INDOP: adicionada explicação de quando usar cada um dos 4 códigos do serviço físico sobre pessoa (30101 a 30104) e exemplos diferenciando cirurgia feita na clínica do próprio médico (30101) de cirurgia feita em hospital de terceiros (30104).",
       "Busca corrigida em 3 pontos: (1) removida a duplicação de resultados idênticos na tabela NBS — a planilha original enviada pelo escritório tinha 216 combinações repetidas (até 5x cada), agora com 1.062 linhas únicas em vez de 1.739; (2) busca agora ignora pontuação (dá pra digitar o código NBS sem os pontos, ex. '123011100'); (3) busca agora tolera plural (ex. 'consultas médicas' encontra 'consulta médica'), com sinônimo adicional para 'consulta' → clínica/atendimento/assessoria.",
       "Nova aba 'INDOP' com as 26 regras oficiais do art. 11 da LC 214/2025 que definem, por tipo de operação, qual endereço determina o Município/Estado que recebe o IBS — busca por tipo de serviço, com o código indOp, a regra geral e qual endereço precisa ser identificado na nota.",
       "Nova aba 'Perguntas Frequentes' com respostas detalhadas escritas nas conversas com o Claude (sem IA embutida na ferramenta em si, por questão de segurança — chave de API não pode ficar exposta num site estático). Primeira pergunta: o que muda no aluguel e quando começa a obrigação de nota fiscal.",
@@ -475,10 +479,10 @@ const EXEMPLOS_INDOP = {
   "20101": ["aluguel de imóvel", "compra e venda de imóvel", "obra no imóvel"],
   "20201": ["reforma", "pintura", "jardinagem", "dedetização", "limpeza de imóvel"],
   "20301": ["corretagem imobiliária", "administração de aluguel"],
-  "30101": ["consulta médica", "consulta odontológica", "dentista", "corte de cabelo", "manicure", "fisioterapia", "massagem", "academia presencial", "personal trainer"],
-  "30102": ["consulta médica", "consulta odontológica", "dentista", "corte de cabelo", "manicure", "fisioterapia"],
-  "30103": ["consulta médica", "consulta odontológica", "dentista", "corte de cabelo", "manicure", "fisioterapia"],
-  "30104": ["consulta médica", "consulta odontológica", "dentista", "corte de cabelo", "manicure", "fisioterapia"],
+  "30101": ["consulta médica", "consulta odontológica", "dentista", "cirurgia realizada na própria clínica do médico", "cirurgia no consultório", "corte de cabelo", "manicure", "fisioterapia", "massagem", "academia presencial", "personal trainer"],
+  "30102": ["consulta médica domiciliar", "atendimento a domicílio", "manicure a domicílio", "personal trainer a domicílio", "home care pago pelo próprio paciente"],
+  "30103": ["cirurgia paga por convênio mas realizada em local do paciente", "exame feito no endereço de quem recebe o serviço quando difere de quem paga"],
+  "30104": ["cirurgia realizada em hospital de terceiros", "cirurgia em hospital que não é do médico nem do paciente", "procedimento em clínica conveniada de terceiros"],
   "40101": ["organização de evento", "congresso", "feira de negócios", "show", "exposição"],
   "50101": ["conserto de eletrônico", "manutenção de veículo", "assistência técnica"],
   "50102": ["conserto de eletrônico", "manutenção de veículo", "assistência técnica"],
