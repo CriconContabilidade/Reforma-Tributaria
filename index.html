@@ -304,6 +304,7 @@
     <button data-tab="tributacao">🧾 Tributação de Serviços</button>
     <button data-tab="seletivo">🚬 Imposto Seletivo</button>
     <button data-tab="beneficios">🎁 Benefícios Fiscais</button>
+    <button data-tab="indop">📍 INDOP</button>
     <button data-tab="faq">❓ Perguntas Frequentes</button>
   </nav>
 
@@ -353,6 +354,26 @@
     <div class="card-list" id="listBeneficios"></div>
   </section>
 
+  <!-- INDOP -->
+  <section class="panel" id="panel-indop">
+    <div class="info-box">
+      <strong>indOp (Indicador de Operação)</strong> é um código de 5 dígitos que diz, para fins de IBS/CBS, <strong>onde</strong> a operação é considerada realizada — e por consequência, qual Município/Estado tem direito ao imposto. Isso importa porque o IBS é cobrado no <strong>destino</strong>, não na origem: para cada tipo de serviço, a lei define um endereço de referência diferente (do imóvel, do prestador, do adquirente, do destinatário, do evento etc.), e é esse endereço que precisa ser identificado corretamente na nota. A base é o <strong>art. 11 da LC 214/2025</strong>.
+    </div>
+    <input type="text" class="search-box" id="searchIndop" placeholder="Buscar tipo de operação: ex. imóvel, transporte, evento, publicidade...">
+    <div id="indopStatus" class="source-link" style="margin-bottom:10px;"></div>
+    <div class="card-list" id="listIndop"></div>
+    <div class="info-box" style="margin-top:22px; font-size:0.82rem;">
+      <strong>Notas de rodapé da tabela oficial:</strong><br>
+      (1) Se o imóvel estiver em mais de um Município, considera-se local do imóvel o Município onde está a maior parte da área.<br>
+      (2) Serviços do inc. III, se parcialmente prestados à distância, seguem a regra do inc. X.<br>
+      (3) Em aquisições centralizadas por contribuinte do regime regular com mais de um estabelecimento (sem vedação de créditos), considera-se domicílio principal do adquirente o local do estabelecimento matriz.<br>
+      (4) Aplica-se a regra do inc. X às operações de cessão de espaço para serviços publicitários.<br>
+      (5) Se o adquirente for residente/domiciliado no exterior e o destinatário no País, considera-se local da operação o domicílio do destinatário.<br>
+      (6) Domicílio do destinatário: ver §3º do art. 11.
+    </div>
+    <p class="source-link" style="margin-top:14px;">Fonte: <a href="https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm" target="_blank" rel="noopener noreferrer">LC 214/2025, art. 11</a></p>
+  </section>
+
   <!-- FAQ -->
   <section class="panel" id="panel-faq">
     <div class="info-box">
@@ -379,6 +400,7 @@ const UPDATE_LOG = [
   {
     date: "10/08/2026",
     changes: [
+      "Nova aba 'INDOP' com as 26 regras oficiais do art. 11 da LC 214/2025 que definem, por tipo de operação, qual endereço determina o Município/Estado que recebe o IBS — busca por tipo de serviço, com o código indOp, a regra geral e qual endereço precisa ser identificado na nota.",
       "Nova aba 'Perguntas Frequentes' com respostas detalhadas escritas nas conversas com o Claude (sem IA embutida na ferramenta em si, por questão de segurança — chave de API não pode ficar exposta num site estático). Primeira pergunta: o que muda no aluguel e quando começa a obrigação de nota fiscal.",
       "Aba 'Códigos de Serviço' passou a usar a planilha oficial de correlação enviada pelo escritório (1.739 linhas Item LC 116 × NBS × CST-IBS/CBS × cClassTrib), substituindo a base curada manual anterior. Busca por nome do serviço, item LC 116 ou código NBS, com sinônimos para termos do dia a dia (dentista, advogado, eletricista, pintor, professor, contador, veterinário). Mantida nota explicando que holding pura (só participação societária) não gera código por não ser prestação de serviço.",
       "Base de códigos NBS ampliada com as áreas de atuação do escritório: odontologia, palestras/conferências, elétrica, pintura, gestão de carteiras de investimentos e consultoria financeira (holdings). Adicionada nota explicando que participação societária pura (holding) não gera código NBS por não ser prestação de serviço.",
@@ -439,6 +461,22 @@ async function loadNbsData() {
     console.error("Falha ao carregar nbs-data.json", err);
   }
   renderCodigos(document.getElementById("searchCodigos").value);
+}
+
+let INDOP_DATA = [];
+let indopDataStatus = "loading";
+
+async function loadIndopData() {
+  try {
+    const res = await fetch("indop-data.json");
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    INDOP_DATA = await res.json();
+    indopDataStatus = "ready";
+  } catch (err) {
+    indopDataStatus = "error";
+    console.error("Falha ao carregar indop-data.json", err);
+  }
+  renderIndop(document.getElementById("searchIndop").value);
 }
 
 const TRIBUTACAO_SERVICOS = [
@@ -768,6 +806,49 @@ function renderBeneficios(filter = "") {
   `).join("") : '<div class="empty">Nenhum benefício encontrado.</div>';
 }
 
+function renderIndop(filter = "") {
+  const el = document.getElementById("listIndop");
+  const status = document.getElementById("indopStatus");
+
+  if (indopDataStatus === "loading") {
+    status.textContent = "Carregando tabela de indOp...";
+    el.innerHTML = "";
+    return;
+  }
+  if (indopDataStatus === "error") {
+    status.textContent = "";
+    el.innerHTML = `<div class="empty">Não foi possível carregar a base local (indop-data.json). Se você está abrindo o arquivo direto (file://), rode via um servidor local ou acesse a versão publicada.</div>`;
+    return;
+  }
+
+  const filtered = filter.trim()
+    ? INDOP_DATA.filter(r => matchesQuery(filter, r.tipoOperacao, r.caracteristica, r.localDfe, r.artigo, r.indOp))
+    : INDOP_DATA;
+
+  if (!filtered.length) {
+    status.textContent = "";
+    el.innerHTML = `<div class="empty">Nenhuma operação encontrada para esse termo (${INDOP_DATA.length} regras cadastradas).</div>`;
+    return;
+  }
+
+  status.textContent = `${filtered.length} resultado${filtered.length === 1 ? "" : "s"}.`;
+
+  el.innerHTML = filtered.map(r => `
+    <div class="item-card">
+      <div class="top-row">
+        <div class="title">${r.tipoOperacao}</div>
+        <span class="badge reduzida">indOp ${r.indOp}</span>
+      </div>
+      <div class="desc">${r.caracteristica}</div>
+      <div class="meta" style="margin-bottom:6px;">
+        <span class="badge especial">Art. 11, ${r.artigo}</span>
+      </div>
+      <div class="desc" style="margin-bottom:4px;"><strong>Local da operação (regra geral):</strong> ${r.localOperacaoRegra}.</div>
+      <div class="desc" style="margin-bottom:0;"><strong>Endereço a identificar no DFe:</strong> ${r.localDfe}</div>
+    </div>
+  `).join("");
+}
+
 function renderFaq(filter = "") {
   const el = document.getElementById("listFaq");
   const filtered = FAQ_DATA.filter(f =>
@@ -798,6 +879,7 @@ document.querySelectorAll("nav.tabs button").forEach(btn => {
 document.getElementById("searchCodigos").addEventListener("input", e => renderCodigos(e.target.value));
 document.getElementById("searchTributacao").addEventListener("input", e => renderTributacao(e.target.value));
 document.getElementById("searchBeneficios").addEventListener("input", e => renderBeneficios(e.target.value));
+document.getElementById("searchIndop").addEventListener("input", e => renderIndop(e.target.value));
 document.getElementById("searchFaq").addEventListener("input", e => renderFaq(e.target.value));
 
 // ---------- Botão de atualização ----------
@@ -828,6 +910,7 @@ document.getElementById("checkUpdateBtn").addEventListener("click", () => {
 
 renderTimeline();
 loadNbsData();
+loadIndopData();
 renderTributacao();
 renderSeletivo();
 renderBeneficios();
