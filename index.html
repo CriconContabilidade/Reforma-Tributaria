@@ -372,6 +372,8 @@ const UPDATE_LOG = [
   {
     date: "10/08/2026",
     changes: [
+      "Base de códigos NBS ampliada com as áreas de atuação do escritório: odontologia, palestras/conferências, elétrica, pintura, gestão de carteiras de investimentos e consultoria financeira (holdings). Adicionada nota explicando que participação societária pura (holding) não gera código NBS por não ser prestação de serviço.",
+      "Busca da aba 'Códigos de Serviço' corrigida para casar por palavra (sem acento, em qualquer ordem) em vez de trecho exato — antes 'consulta médica' não encontrava 'Consulta e clínica médica'.",
       "Aba 'Códigos de Serviço' passou a buscar pelo código NBS (Nomenclatura Brasileira de Serviços) de cada serviço, que substitui a lista da LC 116/2003 como referência da nova NFS-e nacional. Base inicial com 16 serviços comuns (saúde, contabilidade/auditoria/consultoria tributária, jurídico, TI/software, locação de imóveis, educação), cada um com o código NBS e a fonte.",
       "Criação da ferramenta com dados iniciais: cronograma 2026-2033, regras gerais de tributação de serviços, lista do Imposto Seletivo e regimes diferenciados/benefícios fiscais da LC 214/2025.",
       "Alíquota de referência incluída conforme Resolução CGIBS nº 14/2026 (27,91% — IBS 18,7% + CBS 9,21%)."
@@ -531,6 +533,62 @@ const CODIGOS_SERVICO = [
     capitulo: "Cap. 22 — Educação",
     desc: "Autoescola, cursos de informática, cursos livres e treinamentos não enquadrados em outra posição específica.",
     source: { label: "Cosmos Bluesoft — NBS 1.2206.19.90", url: "https://cosmos.bluesoft.com.br/nbs/outros-servicos-de-educacao-e-treinamento-122061990" }
+  },
+  {
+    servico: "Serviços odontológicos (dentistas)",
+    nbs: "1.2301.23.00",
+    capitulo: "Cap. 23 — Saúde humana",
+    desc: "Consultas e procedimentos odontológicos em geral, prestados em consultório ou clínica.",
+    source: { label: "Cosmos Bluesoft — NBS 1.2301.23.00", url: "https://cosmos.bluesoft.com.br/nbs/servicos-odontologicos-123012300" }
+  },
+  {
+    servico: "Palestras e conferências",
+    nbs: "1.2206.19.10",
+    capitulo: "Cap. 22 — Educação",
+    desc: "Palestras, conferências e apresentações corporativas ou educacionais.",
+    source: { label: "Cosmos Bluesoft — NBS 1.2206.19.10", url: "https://cosmos.bluesoft.com.br/nbs/servicos-de-palestras-e-conferencias-122061910" }
+  },
+  {
+    servico: "Instalação elétrica (fiação e componentes)",
+    nbs: "1.0126.10.00",
+    capitulo: "Cap. 1 — Construção",
+    desc: "Instalação de fiação elétrica, circuitos básicos, tomadas, interruptores, aterramento e demais componentes elétricos em edificações.",
+    source: { label: "Cosmos Bluesoft — NBS 1.0126.10.00", url: "https://cosmos.bluesoft.com.br/nbs/servicos-de-instalacao-de-fiacao-eletrica-e-componentes-101261000" }
+  },
+  {
+    servico: "Outros serviços de instalação elétrica / manutenção",
+    nbs: "1.0126.90.00",
+    capitulo: "Cap. 1 — Construção",
+    desc: "Serviços de instalação e manutenção elétrica não enquadrados na posição específica de fiação e componentes.",
+    source: { label: "Cosmos Bluesoft — NBS 1.0126.90.00", url: "https://cosmos.bluesoft.com.br/nbs/outros-servicos-de-instalacao-eletrica-101269000" }
+  },
+  {
+    servico: "Serviços de pintura",
+    nbs: "1.0134.00.00",
+    capitulo: "Cap. 1 — Construção",
+    desc: "Pintura predial, residencial ou comercial.",
+    source: { label: "Cosmos Bluesoft — NBS 1.0134.00.00", url: "https://cosmos.bluesoft.com.br/nbs/servicos-de-pintura-101340000" }
+  },
+  {
+    servico: "Gestão e administração de carteiras de investimentos",
+    nbs: "1.0905.20.00",
+    capitulo: "Cap. 9 — Serviços financeiros",
+    desc: "Gestão e administração de carteiras de ativos por conta de terceiros (holdings, investidores pessoa física ou jurídica), exceto fundos de pensão.",
+    source: { label: "Cosmos Bluesoft — NBS 1.0905.20.00", url: "https://cosmos.bluesoft.com.br/nbs/servicos-de-gestao-e-administracao-de-carteiras-de-ativos-exceto-fundos-de-pensao-109052000" }
+  },
+  {
+    servico: "Consultoria gerencial financeira",
+    nbs: "1.1401.12.00",
+    capitulo: "Cap. 14 — Consultoria empresarial",
+    desc: "Consultoria financeira para empresas e grupos econômicos, incluindo assessoria a holdings sobre estrutura de capital e investimentos.",
+    source: { label: "Cosmos Bluesoft — NBS 1.1401.12.00", url: "https://cosmos.bluesoft.com.br/nbs/servicos-de-consultoria-gerencial-financeira-114011200" }
+  },
+  {
+    servico: "Holding pura (só participação societária)",
+    nbs: "não se aplica",
+    capitulo: "Fora do campo de incidência",
+    desc: "Recebimento de dividendos e mera titularidade de participação societária não é prestação de serviço — não há incidência de IBS/CBS nem código NBS aqui. Se a holding também presta serviços de gestão/administração às empresas do grupo, use o código de 'Consultoria gerencial financeira' ou 'Gestão de carteiras' acima para essa parte.",
+    source: { label: "LC 214/2025 — confirmar enquadramento no caso concreto", url: "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm" }
   }
 ];
 
