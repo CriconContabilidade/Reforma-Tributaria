@@ -317,11 +317,15 @@
   <!-- CODIGOS DE SERVICO -->
   <section class="panel" id="panel-codigos">
     <div class="info-box">
-      A nota fiscal do novo modelo usa dois códigos: o <strong>CST-IBS/CBS</strong> (situação tributária geral — tributação integral, redução, isenção, imunidade etc., 18 códigos) e o <strong>cClassTrib</strong> (classificação específica dentro de cada CST, ~164 códigos, um para cada hipótese da LC 214/2025). A tabela oficial completa e atualizada fica no Portal Nacional da NF-e / Informe Técnico RT 2025.002 da RFB e do Comitê Gestor do IBS — use a busca abaixo para achar rápido a situação e depois confira o código exato na fonte oficial.
+      A partir da reforma, todo serviço prestado precisa ser classificado pelo código <strong>NBS</strong> (Nomenclatura Brasileira de Serviços) na nota fiscal — a NBS substitui a lista de serviços da LC 116/2003 como referência principal do novo NFS-e nacional (as duas ainda vão coexistir em uma tabela de correlação até 2032). Busque pelo nome do serviço prestado pelo cliente para achar o código NBS correspondente. A base abaixo cobre os serviços mais comuns da carteira do escritório — para qualquer serviço que não aparecer aqui, use o buscador oficial linkado no fim da lista.
     </div>
-    <input type="text" class="search-box" id="searchCodigos" placeholder="Buscar situação: ex. exportação, saúde, cesta básica, monofásico...">
+    <input type="text" class="search-box" id="searchCodigos" placeholder="Buscar serviço: ex. consulta médica, contabilidade, aluguel, software...">
     <div class="card-list" id="listCodigos"></div>
-    <p class="source-link" style="margin-top:14px;">Tabela oficial completa: <a href="https://www.nfe.fazenda.gov.br/portal/informacoesReformaTributaria.aspx" target="_blank" rel="noopener noreferrer">Portal Nacional da NF-e — Reforma Tributária</a></p>
+    <p class="source-link" style="margin-top:14px;">Não achou o serviço? Consulte a tabela completa: <a href="https://cosmos.bluesoft.com.br/nbs" target="_blank" rel="noopener noreferrer">Buscador NBS — Cosmos Bluesoft</a> ou <a href="https://www.gov.br/mdic/pt-br/assuntos/zpe/arquivos/2025/lista-de-servicos-zpe.pdf" target="_blank" rel="noopener noreferrer">tabela oficial NBS 2.0 (MDIC)</a></p>
+
+    <div class="info-box" style="margin-top:22px;">
+      <strong>Além do código NBS</strong>, a nota também carrega o <strong>CST-IBS/CBS</strong> (situação tributária geral — tributação integral, redução, isenção, imunidade etc., 18 códigos) e o <strong>cClassTrib</strong> (classificação específica dentro de cada CST, ~164 códigos). A tabela oficial completa fica no Portal Nacional da NF-e / Informe Técnico RT 2025.002 da RFB e do Comitê Gestor do IBS: <a href="https://www.nfe.fazenda.gov.br/portal/informacoesReformaTributaria.aspx" target="_blank" rel="noopener noreferrer">consultar aqui</a>.
+    </div>
   </section>
 
   <!-- TRIBUTACAO DE SERVICOS -->
@@ -368,7 +372,8 @@ const UPDATE_LOG = [
   {
     date: "10/08/2026",
     changes: [
-      "Criação da ferramenta com dados iniciais: cronograma 2026-2033, glossário de situações tributárias de serviço, regras gerais de tributação de serviços, lista do Imposto Seletivo e regimes diferenciados/benefícios fiscais da LC 214/2025.",
+      "Aba 'Códigos de Serviço' passou a buscar pelo código NBS (Nomenclatura Brasileira de Serviços) de cada serviço, que substitui a lista da LC 116/2003 como referência da nova NFS-e nacional. Base inicial com 16 serviços comuns (saúde, contabilidade/auditoria/consultoria tributária, jurídico, TI/software, locação de imóveis, educação), cada um com o código NBS e a fonte.",
+      "Criação da ferramenta com dados iniciais: cronograma 2026-2033, regras gerais de tributação de serviços, lista do Imposto Seletivo e regimes diferenciados/benefícios fiscais da LC 214/2025.",
       "Alíquota de referência incluída conforme Resolução CGIBS nº 14/2026 (27,91% — IBS 18,7% + CBS 9,21%)."
     ]
   }
@@ -409,52 +414,123 @@ const CRONOGRAMA = [
 
 const CODIGOS_SERVICO = [
   {
-    situacao: "Tributação integral",
-    desc: "Serviço sem nenhum benefício: IBS + CBS incidem pela alíquota padrão cheia sobre a operação.",
-    badge: "integral", badgeLabel: "Padrão",
-    source: { label: "CST 000 (categoria geral) — confirmar cClassTrib exato na tabela oficial", url: "https://www.nfe.fazenda.gov.br/portal/informacoesReformaTributaria.aspx" }
+    servico: "Consulta e clínica médica",
+    nbs: "1.2301.21.00",
+    capitulo: "Cap. 23 — Saúde humana",
+    desc: "Serviços médicos ambulatoriais em geral, incluindo consultas em consultório ou clínica.",
+    source: { label: "Cosmos Bluesoft — NBS 1.2301.21.00", url: "https://cosmos.bluesoft.com.br/nbs/servicos-de-clinica-medica-123012100" }
   },
   {
-    situacao: "Alíquota reduzida (regime diferenciado)",
-    desc: "Serviço enquadrado em algum dos setores com redução prevista na LC 214/2025 (ex.: saúde, educação, transporte, profissões regulamentadas). O percentual de redução varia por setor — veja a aba 'Tributação de Serviços'.",
-    badge: "reduzida", badgeLabel: "Redução",
-    source: { label: "LC 214/2025, dispositivos específicos por setor", url: "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm" }
+    servico: "Serviços médicos especializados",
+    nbs: "1.2301.22.00",
+    capitulo: "Cap. 23 — Saúde humana",
+    desc: "Especialidades médicas (cardiologia, dermatologia, neurologia, acupuntura etc.), inclusive quando prestadas em consultório dentro de hospital.",
+    source: { label: "Cosmos Bluesoft — NBS 1.2301.22.00", url: "https://cosmos.bluesoft.com.br/nbs/servicos-medicos-especializados-123012200" }
   },
   {
-    situacao: "Alíquota zero / isenção",
-    desc: "Cesta básica nacional, hortícolas, frutas e ovos, e alguns serviços essenciais (ex.: transporte público urbano) não sofrem incidência de IBS/CBS.",
-    badge: "zero", badgeLabel: "Zero",
-    source: { label: "LC 214/2025, Anexos I e XV", url: "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm" }
+    servico: "Serviços em UTI (terapia intensiva)",
+    nbs: "1.2301.18.00",
+    capitulo: "Cap. 23 — Saúde humana",
+    desc: "Serviços prestados em unidades de terapia intensiva.",
+    source: { label: "Cosmos Bluesoft — NBS 1.2301.18.00", url: "https://cosmos.bluesoft.com.br/nbs/servicos-prestados-em-unidades-de-terapia-intensiva-123011800" }
   },
   {
-    situacao: "Imunidade constitucional",
-    desc: "Operações protegidas pela Constituição (ex.: templos de qualquer culto, livros/jornais/periódicos, exportações) não sofrem incidência de IBS/CBS.",
-    badge: "especial", badgeLabel: "Imune",
-    source: { label: "CF/88, art. 150, VI + EC 132/2023", url: "https://www.planalto.gov.br/ccivil_03/constituicao/emendas/emc/emc132.htm" }
+    servico: "Outros serviços de saúde (exceto hospitalares)",
+    nbs: "1.2301.99.00",
+    capitulo: "Cap. 23 — Saúde humana",
+    desc: "Serviços de saúde humana não classificados nas posições específicas e que não são prestados em ambiente hospitalar.",
+    source: { label: "Cosmos Bluesoft — NBS 1.2301.99.00", url: "https://cosmos.bluesoft.com.br/nbs/outros-servicos-de-saude-humana-exceto-os-servicos-hospitalares-123019900" }
   },
   {
-    situacao: "Exportação de serviço",
-    desc: "Exportações não sofrem incidência de IBS/CBS (princípio do destino) e mantêm direito ao aproveitamento de créditos das etapas anteriores.",
-    badge: "zero", badgeLabel: "Não incidência",
-    source: { label: "LC 214/2025", url: "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm" }
+    servico: "Serviços de contabilidade",
+    nbs: "1.1302.21.00",
+    capitulo: "Cap. 13 — Jurídicos e contábeis",
+    desc: "Escrituração contábil, fiscal e demais serviços de contabilidade prestados a terceiros.",
+    source: { label: "Cosmos Bluesoft — NBS 1.1302.21.00", url: "https://cosmos.bluesoft.com.br/nbs/servicos-de-contabilidade-113022100" }
   },
   {
-    situacao: "Simples Nacional",
-    desc: "Empresas optantes seguem regras próprias de recolhimento (por dentro do DAS, com possibilidade de opção pelo regime regular de apuração para melhor aproveitamento de créditos por clientes). Regras detalhadas dependem de regulamentação específica do Comitê Gestor.",
-    badge: "especial", badgeLabel: "Regime próprio",
-    source: { label: "LC 214/2025, capítulo do Simples Nacional", url: "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm" }
+    servico: "Serviços de auditoria contábil",
+    nbs: "1.1302.11.00",
+    capitulo: "Cap. 13 — Jurídicos e contábeis",
+    desc: "Auditoria de demonstrações contábeis e financeiras.",
+    source: { label: "Buscador NBS — confirmar código", url: "https://cosmos.bluesoft.com.br/nbs" }
   },
   {
-    situacao: "Suspensão / diferimento",
-    desc: "Operações em que o recolhimento do imposto é postergado para uma etapa seguinte da cadeia (comum em insumos e operações entre contribuintes do mesmo grupo econômico ou cadeia produtiva específica).",
-    badge: "especial", badgeLabel: "Diferido",
-    source: { label: "Confirmar cClassTrib específico na tabela oficial", url: "https://www.nfe.fazenda.gov.br/portal/informacoesReformaTributaria.aspx" }
+    servico: "Consultoria tributária (pessoa jurídica)",
+    nbs: "1.1303.10.00",
+    capitulo: "Cap. 13 — Jurídicos e contábeis",
+    desc: "Consultoria e planejamento tributário para empresas.",
+    source: { label: "Buscador NBS — confirmar código", url: "https://cosmos.bluesoft.com.br/nbs" }
   },
   {
-    situacao: "Monofásico / tributação concentrada",
-    desc: "Setores em que o imposto é recolhido de forma concentrada em uma etapa da cadeia (ex.: combustíveis), com as demais etapas não sofrendo nova incidência.",
-    badge: "especial", badgeLabel: "Monofásico",
-    source: { label: "Confirmar cClassTrib específico na tabela oficial", url: "https://www.nfe.fazenda.gov.br/portal/informacoesReformaTributaria.aspx" }
+    servico: "Consultoria tributária (pessoa física)",
+    nbs: "1.1303.20.00",
+    capitulo: "Cap. 13 — Jurídicos e contábeis",
+    desc: "Consultoria e planejamento tributário para pessoas físicas.",
+    source: { label: "Buscador NBS — confirmar código", url: "https://cosmos.bluesoft.com.br/nbs" }
+  },
+  {
+    servico: "Serviços jurídicos / advocacia (áreas gerais)",
+    nbs: "1.1301.20.00",
+    capitulo: "Cap. 13 — Jurídicos e contábeis",
+    desc: "Representação e consultoria jurídica em direito civil, trabalhista, tributário, empresarial etc.",
+    source: { label: "Buscador NBS — confirmar código", url: "https://cosmos.bluesoft.com.br/nbs" }
+  },
+  {
+    servico: "Serviços jurídicos em direito penal",
+    nbs: "1.1301.10.00",
+    capitulo: "Cap. 13 — Jurídicos e contábeis",
+    desc: "Representação e consultoria jurídica em direito penal.",
+    source: { label: "Buscador NBS — confirmar código", url: "https://cosmos.bluesoft.com.br/nbs" }
+  },
+  {
+    servico: "Desenvolvimento de software",
+    nbs: "1.1502.10.00",
+    capitulo: "Cap. 15 — Tecnologia da informação",
+    desc: "Projeto, desenvolvimento e instalação de aplicativos e programas não customizados; elaboração de programas sob encomenda.",
+    source: { label: "Cosmos Bluesoft — Cap. 15 TI", url: "https://cosmos.bluesoft.com.br/nbs/servicos-de-tecnologia-da-informacao-115" }
+  },
+  {
+    servico: "Hospedagem de site (web hosting)",
+    nbs: "1.1506.10.00",
+    capitulo: "Cap. 15 — Tecnologia da informação",
+    desc: "Serviços de hospedagem de sites na internet.",
+    source: { label: "Cosmos Bluesoft — Cap. 15 TI", url: "https://cosmos.bluesoft.com.br/nbs/servicos-de-tecnologia-da-informacao-115" }
+  },
+  {
+    servico: "Hospedagem de aplicações e programas",
+    nbs: "1.1506.20.00",
+    capitulo: "Cap. 15 — Tecnologia da informação",
+    desc: "Hospedagem de aplicações e programas de terceiros (inclui parte do modelo SaaS).",
+    source: { label: "Cosmos Bluesoft — Cap. 15 TI", url: "https://cosmos.bluesoft.com.br/nbs/servicos-de-tecnologia-da-informacao-115" }
+  },
+  {
+    servico: "Locação/administração de imóveis residenciais",
+    nbs: "1.1001.11.00",
+    capitulo: "Cap. 10 — Serviços imobiliários",
+    desc: "Aluguel e administração de imóveis residenciais por conta de terceiros.",
+    source: { label: "Cosmos Bluesoft — NBS 1.1001.11.00", url: "https://cosmos.bluesoft.com.br/nbs/servicos-de-administracao-e-locacao-de-imoveis-residenciais-110011100" }
+  },
+  {
+    servico: "Locação/administração de imóveis não residenciais",
+    nbs: "1.1001.12.00",
+    capitulo: "Cap. 10 — Serviços imobiliários",
+    desc: "Aluguel e administração de imóveis comerciais, industriais e outros não residenciais.",
+    source: { label: "Cosmos Bluesoft — NBS 1.1001.12.00", url: "https://cosmos.bluesoft.com.br/nbs/servicos-de-administracao-e-locacao-de-imoveis-nao-residenciais-1100112" }
+  },
+  {
+    servico: "Educação esportiva e recreacional",
+    nbs: "1.2206.12.00",
+    capitulo: "Cap. 22 — Educação",
+    desc: "Aulas e cursos de natação, artes marciais, ioga, ginástica, equitação e similares.",
+    source: { label: "Cosmos Bluesoft — NBS 1.2206.12.00", url: "https://cosmos.bluesoft.com.br/nbs/servicos-de-educacao-desportiva-e-recreacional-122061200" }
+  },
+  {
+    servico: "Outros cursos e treinamentos (não classificados)",
+    nbs: "1.2206.19.90",
+    capitulo: "Cap. 22 — Educação",
+    desc: "Autoescola, cursos de informática, cursos livres e treinamentos não enquadrados em outra posição específica.",
+    source: { label: "Cosmos Bluesoft — NBS 1.2206.19.90", url: "https://cosmos.bluesoft.com.br/nbs/outros-servicos-de-educacao-e-treinamento-122061990" }
   }
 ];
 
@@ -589,6 +665,19 @@ function badgeHtml(cls, label) {
   return `<span class="badge ${cls}">${label}</span>`;
 }
 
+// Normaliza texto (remove acentos) e casa se TODAS as palavras da busca
+// aparecem em algum dos campos, em qualquer ordem — assim "consulta médica"
+// acha "Consulta e clínica médica" e "consulta medica" (sem acento) também funciona.
+function normalize(str) {
+  return str.normalize("NFD").replace(new RegExp("[̀-ͯ]", "g"), "").toLowerCase();
+}
+function matchesQuery(query, ...fields) {
+  const words = normalize(query).split(/\s+/).filter(Boolean);
+  if (words.length === 0) return true;
+  const haystack = normalize(fields.join(" "));
+  return words.every(w => haystack.includes(w));
+}
+
 function renderTimeline() {
   const el = document.getElementById("timelineList");
   el.innerHTML = CRONOGRAMA.map(item => `
@@ -603,27 +692,28 @@ function renderTimeline() {
 
 function renderCodigos(filter = "") {
   const el = document.getElementById("listCodigos");
-  const f = filter.toLowerCase();
   const filtered = CODIGOS_SERVICO.filter(c =>
-    c.situacao.toLowerCase().includes(f) || c.desc.toLowerCase().includes(f)
+    matchesQuery(filter, c.servico, c.desc, c.capitulo, c.nbs)
   );
   el.innerHTML = filtered.length ? filtered.map(c => `
     <div class="item-card">
       <div class="top-row">
-        <div class="title">${c.situacao}</div>
-        ${badgeHtml(c.badge, c.badgeLabel)}
+        <div class="title">${c.servico}</div>
+        <span class="badge reduzida">NBS ${c.nbs}</span>
       </div>
       <div class="desc">${c.desc}</div>
+      <div class="meta" style="margin-bottom:6px;">
+        <span class="badge especial">${c.capitulo}</span>
+      </div>
       <div class="source-link">Fonte: <a href="${c.source.url}" target="_blank" rel="noopener noreferrer">${c.source.label}</a></div>
     </div>
-  `).join("") : '<div class="empty">Nenhuma situação encontrada.</div>';
+  `).join("") : `<div class="empty">Não encontrado na base curada. <a href="https://cosmos.bluesoft.com.br/nbs" target="_blank" rel="noopener noreferrer">Buscar na tabela NBS completa →</a></div>`;
 }
 
 function renderTributacao(filter = "") {
   const el = document.getElementById("listTributacao");
-  const f = filter.toLowerCase();
   const filtered = TRIBUTACAO_SERVICOS.filter(t =>
-    t.setor.toLowerCase().includes(f) || t.desc.toLowerCase().includes(f)
+    matchesQuery(filter, t.setor, t.desc)
   );
   el.innerHTML = filtered.length ? filtered.map(t => `
     <div class="item-card">
@@ -649,9 +739,8 @@ function renderSeletivo() {
 
 function renderBeneficios(filter = "") {
   const el = document.getElementById("listBeneficios");
-  const f = filter.toLowerCase();
   const filtered = BENEFICIOS_FISCAIS.filter(b =>
-    b.nome.toLowerCase().includes(f) || b.desc.toLowerCase().includes(f)
+    matchesQuery(filter, b.nome, b.desc)
   );
   el.innerHTML = filtered.length ? filtered.map(b => `
     <div class="item-card">
