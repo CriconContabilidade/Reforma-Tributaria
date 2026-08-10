@@ -304,6 +304,7 @@
     <button data-tab="tributacao">🧾 Tributação de Serviços</button>
     <button data-tab="seletivo">🚬 Imposto Seletivo</button>
     <button data-tab="beneficios">🎁 Benefícios Fiscais</button>
+    <button data-tab="faq">❓ Perguntas Frequentes</button>
   </nav>
 
   <!-- CRONOGRAMA -->
@@ -352,6 +353,15 @@
     <div class="card-list" id="listBeneficios"></div>
   </section>
 
+  <!-- FAQ -->
+  <section class="panel" id="panel-faq">
+    <div class="info-box">
+      Como o Hub não tem servidor próprio, não dá pra colocar uma IA de verdade respondendo perguntas livres aqui dentro (exigiria expor uma chave de API publicamente, o que não é seguro). Em vez disso, essa aba junta respostas detalhadas que já foram elaboradas nas conversas com o Claude — peça no chat pra adicionar uma pergunta nova aqui sempre que quiser.
+    </div>
+    <input type="text" class="search-box" id="searchFaq" placeholder="Buscar pergunta: ex. aluguel, nota fiscal, quando começa...">
+    <div class="card-list" id="listFaq"></div>
+  </section>
+
   <footer>Para atualizar os dados, peça no chat do Claude — a ferramenta guarda o histórico de mudanças no botão "Verificar atualizações".</footer>
 </div>
 
@@ -369,6 +379,7 @@ const UPDATE_LOG = [
   {
     date: "10/08/2026",
     changes: [
+      "Nova aba 'Perguntas Frequentes' com respostas detalhadas escritas nas conversas com o Claude (sem IA embutida na ferramenta em si, por questão de segurança — chave de API não pode ficar exposta num site estático). Primeira pergunta: o que muda no aluguel e quando começa a obrigação de nota fiscal.",
       "Aba 'Códigos de Serviço' passou a usar a planilha oficial de correlação enviada pelo escritório (1.739 linhas Item LC 116 × NBS × CST-IBS/CBS × cClassTrib), substituindo a base curada manual anterior. Busca por nome do serviço, item LC 116 ou código NBS, com sinônimos para termos do dia a dia (dentista, advogado, eletricista, pintor, professor, contador, veterinário). Mantida nota explicando que holding pura (só participação societária) não gera código por não ser prestação de serviço.",
       "Base de códigos NBS ampliada com as áreas de atuação do escritório: odontologia, palestras/conferências, elétrica, pintura, gestão de carteiras de investimentos e consultoria financeira (holdings). Adicionada nota explicando que participação societária pura (holding) não gera código NBS por não ser prestação de serviço.",
       "Busca da aba 'Códigos de Serviço' corrigida para casar por palavra (sem acento, em qualquer ordem) em vez de trecho exato — antes 'consulta médica' não encontrava 'Consulta e clínica médica'.",
@@ -555,6 +566,27 @@ const BENEFICIOS_FISCAIS = [
   }
 ];
 
+const FAQ_DATA = [
+  {
+    pergunta: "O que vai mudar na cobrança de aluguel e quando começa a obrigação de emitir nota fiscal para esse serviço?",
+    data: "10/08/2026",
+    paragrafos: [
+      "<strong>O que muda:</strong> a partir da reforma, a locação de imóveis passa a ser tratada como operação onerosa sujeita a IBS e CBS — mesmo quando o locador é pessoa física. Isso é uma mudança de fundo: hoje o aluguel de pessoa física só entra no Imposto de Renda (carnê-leão/declaração anual); com a reforma, ele também pode virar fato gerador de IBS/CBS, com emissão de nota fiscal de serviço.",
+      "<strong>Nem toda pessoa física é afetada.</strong> Uma pessoa física locadora só se torna contribuinte do IBS/CBS quando cruza os limites definidos na LC 214/2025: receita de locação acima de <strong>R$ 240.000/ano</strong> combinada com <strong>mais de 3 imóveis alugados</strong>, ou receita de locação acima de <strong>R$ 288.000</strong> no próprio ano-calendário (limite mais alto para quem ultrapassa dentro do ano). Quem aluga 1 ou 2 imóveis como renda extra, abaixo desses valores, continua fora do novo regime e segue declarando só no IR como sempre.",
+      "<strong>Pessoa jurídica</strong> (incluindo holdings patrimoniais que alugam imóveis) já é contribuinte do IBS/CBS na locação desde a entrada em vigor da cobrança efetiva, sem esses limites de isenção — é uma das razões pelas quais estruturar aluguéis via holding vem sendo reavaliado por quem está perto dos limites de pessoa física.",
+      "<strong>Quando começa a obrigação de nota fiscal:</strong> a exigência de inscrição no CNPJ e emissão de NFS-e para pessoas físicas enquadradas foi prorrogada para <strong>1º de janeiro de 2027</strong>. Antes disso, a partir de novembro de 2026, a Receita Federal deve liberar um ambiente digital simplificado (no estilo do portal do MEI) com um sandbox de testes para quem vai precisar se adaptar.",
+      "<strong>Créditos:</strong> quem for enquadrado como contribuinte passa a ter direito a aproveitar crédito de IBS/CBS sobre gastos vinculados ao imóvel alugado — materiais de construção, reforma, ampliação e serviços de manutenção — o que hoje não existe nesse formato.",
+      "<strong>Carga tributária no regime pleno (2033):</strong> estimativas de mercado apontam uma carga combinada de até ~35,9% sobre a receita de locação para quem estiver enquadrado (até 27,5% de IRPF somado a até ~8,4% de IBS/CBS), mas isso é projeção com o sistema maduro — vale reavaliar caso a caso perto da data, já que a alíquota de referência do IBS/CBS ainda está sendo ajustada anualmente."
+    ],
+    fontes: [
+      { label: "LC 214/2025", url: "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm" },
+      { label: "Assecont — NFS-e para Aluguel", url: "https://assecont.com.br/nfs-e-locacao-bens-moveis-imoveis-reforma-tributaria/" },
+      { label: "Money Times — Aluguel na reforma tributária", url: "https://www.moneytimes.com.br/reforma-tributaria-aluguel-nota-fiscal-rsgp/" },
+      { label: "Salusse, Marangoni, Parente, Jabur Advogados", url: "https://smabr.com/locacao-de-imoveis-por-pessoas-fisicas-na-reforma-tributaria-quem-tera-de-se-inscrever-no-cnpj-como-contribuinte-do-ibs-e-da-cbs/" }
+    ]
+  }
+];
+
 // ---------- Renderização ----------
 
 function badgeHtml(cls, label) {
@@ -736,6 +768,20 @@ function renderBeneficios(filter = "") {
   `).join("") : '<div class="empty">Nenhum benefício encontrado.</div>';
 }
 
+function renderFaq(filter = "") {
+  const el = document.getElementById("listFaq");
+  const filtered = FAQ_DATA.filter(f =>
+    matchesQuery(filter, f.pergunta, f.paragrafos.join(" "))
+  );
+  el.innerHTML = filtered.length ? filtered.map(f => `
+    <div class="item-card">
+      <div class="title" style="margin-bottom:10px;">${f.pergunta}</div>
+      ${f.paragrafos.map(p => `<div class="desc" style="margin-bottom:10px;">${p}</div>`).join("")}
+      <div class="source-link">Respondido em ${f.data}. Fontes: ${f.fontes.map(s => `<a href="${s.url}" target="_blank" rel="noopener noreferrer">${s.label}</a>`).join(" · ")}</div>
+    </div>
+  `).join("") : `<div class="empty">Nenhuma pergunta cadastrada com esse termo ainda. Pergunte no chat do Claude e peça pra adicionar aqui.</div>`;
+}
+
 // ---------- Tabs ----------
 
 document.querySelectorAll("nav.tabs button").forEach(btn => {
@@ -752,6 +798,7 @@ document.querySelectorAll("nav.tabs button").forEach(btn => {
 document.getElementById("searchCodigos").addEventListener("input", e => renderCodigos(e.target.value));
 document.getElementById("searchTributacao").addEventListener("input", e => renderTributacao(e.target.value));
 document.getElementById("searchBeneficios").addEventListener("input", e => renderBeneficios(e.target.value));
+document.getElementById("searchFaq").addEventListener("input", e => renderFaq(e.target.value));
 
 // ---------- Botão de atualização ----------
 
@@ -784,6 +831,7 @@ loadNbsData();
 renderTributacao();
 renderSeletivo();
 renderBeneficios();
+renderFaq();
 </script>
 
 </body>
