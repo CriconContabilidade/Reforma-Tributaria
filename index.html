@@ -319,7 +319,7 @@
   <!-- CODIGOS DE SERVICO -->
   <section class="panel" id="panel-codigos">
     <div class="info-box">
-      A partir da reforma, todo serviço prestado precisa ser classificado pelo código <strong>NBS</strong> (Nomenclatura Brasileira de Serviços) na nota fiscal — a NBS substitui a lista de serviços da LC 116/2003 como referência principal do novo NFS-e nacional (as duas ainda vão coexistir em uma tabela de correlação até 2032). Busque pelo nome do serviço, pelo item da lista antiga da LC 116 ou pelo próprio código NBS. Base com as <strong>1.739 correlações oficiais</strong> entre item LC 116 × NBS × CST-IBS/CBS × cClassTrib.
+      A partir da reforma, todo serviço prestado precisa ser classificado pelo código <strong>NBS</strong> (Nomenclatura Brasileira de Serviços) na nota fiscal — a NBS substitui a lista de serviços da LC 116/2003 como referência principal do novo NFS-e nacional (as duas ainda vão coexistir em uma tabela de correlação até 2032). Busque pelo nome do serviço, pelo item da lista antiga da LC 116 ou pelo próprio código NBS. Base com <strong>1.062 correlações oficiais únicas</strong> entre item LC 116 × NBS × CST-IBS/CBS × cClassTrib.
     </div>
     <input type="text" class="search-box" id="searchCodigos" placeholder="Buscar serviço: ex. consulta médica, contabilidade, aluguel, software, item 07.02...">
     <div id="codigosStatus" class="source-link" style="margin-bottom:10px;"></div>
@@ -400,6 +400,7 @@ const UPDATE_LOG = [
   {
     date: "10/08/2026",
     changes: [
+      "Busca corrigida em 3 pontos: (1) removida a duplicação de resultados idênticos na tabela NBS — a planilha original enviada pelo escritório tinha 216 combinações repetidas (até 5x cada), agora com 1.062 linhas únicas em vez de 1.739; (2) busca agora ignora pontuação (dá pra digitar o código NBS sem os pontos, ex. '123011100'); (3) busca agora tolera plural (ex. 'consultas médicas' encontra 'consulta médica'), com sinônimo adicional para 'consulta' → clínica/atendimento/assessoria.",
       "Nova aba 'INDOP' com as 26 regras oficiais do art. 11 da LC 214/2025 que definem, por tipo de operação, qual endereço determina o Município/Estado que recebe o IBS — busca por tipo de serviço, com o código indOp, a regra geral e qual endereço precisa ser identificado na nota.",
       "Nova aba 'Perguntas Frequentes' com respostas detalhadas escritas nas conversas com o Claude (sem IA embutida na ferramenta em si, por questão de segurança — chave de API não pode ficar exposta num site estático). Primeira pergunta: o que muda no aluguel e quando começa a obrigação de nota fiscal.",
       "Aba 'Códigos de Serviço' passou a usar a planilha oficial de correlação enviada pelo escritório (1.739 linhas Item LC 116 × NBS × CST-IBS/CBS × cClassTrib), substituindo a base curada manual anterior. Busca por nome do serviço, item LC 116 ou código NBS, com sinônimos para termos do dia a dia (dentista, advogado, eletricista, pintor, professor, contador, veterinário). Mantida nota explicando que holding pura (só participação societária) não gera código por não ser prestação de serviço.",
@@ -466,11 +467,45 @@ async function loadNbsData() {
 let INDOP_DATA = [];
 let indopDataStatus = "loading";
 
+// A tabela oficial classifica por categoria abstrata da operação (ex.: "serviço
+// prestado fisicamente sobre a pessoa"), não por profissão ou nome comercial do
+// serviço. Este mapa liga exemplos do dia a dia a cada código indOp para a busca
+// funcionar com os termos que o usuário realmente digita.
+const EXEMPLOS_INDOP = {
+  "20101": ["aluguel de imóvel", "compra e venda de imóvel", "obra no imóvel"],
+  "20201": ["reforma", "pintura", "jardinagem", "dedetização", "limpeza de imóvel"],
+  "20301": ["corretagem imobiliária", "administração de aluguel"],
+  "30101": ["consulta médica", "consulta odontológica", "dentista", "corte de cabelo", "manicure", "fisioterapia", "massagem", "academia presencial", "personal trainer"],
+  "30102": ["consulta médica", "consulta odontológica", "dentista", "corte de cabelo", "manicure", "fisioterapia"],
+  "30103": ["consulta médica", "consulta odontológica", "dentista", "corte de cabelo", "manicure", "fisioterapia"],
+  "30104": ["consulta médica", "consulta odontológica", "dentista", "corte de cabelo", "manicure", "fisioterapia"],
+  "40101": ["organização de evento", "congresso", "feira de negócios", "show", "exposição"],
+  "50101": ["conserto de eletrônico", "manutenção de veículo", "assistência técnica"],
+  "50102": ["conserto de eletrônico", "manutenção de veículo", "assistência técnica"],
+  "50103": ["conserto de eletrônico", "manutenção de veículo", "assistência técnica"],
+  "50104": ["conserto de eletrônico", "manutenção de veículo", "assistência técnica"],
+  "50201": ["serviço portuário"],
+  "60101": ["uber", "táxi", "ônibus", "viagem aérea", "fretamento"],
+  "70101": ["frete", "entrega", "motoboy", "transportadora"],
+  "70102": ["frete", "entrega", "motoboy", "transportadora"],
+  "80101": ["pedágio"],
+  "100101": ["outdoor", "painel publicitário", "anúncio em ônibus"],
+  "100102": ["outdoor", "painel publicitário", "anúncio em ônibus"],
+  "100201": ["outdoor sem cobrança", "publicidade institucional"],
+  "100301": ["consultoria remota", "telemedicina", "aula online", "curso ead", "contabilidade", "advocacia", "ti", "design gráfico à distância", "mentoria online", "consultoria financeira"],
+  "100302": ["consultoria remota", "telemedicina", "aula online", "curso ead", "contabilidade", "advocacia", "ti", "design gráfico à distância", "mentoria online"],
+  "100401": ["consultoria remota", "telemedicina", "aula online", "curso ead"],
+  "100501": ["licenciamento de software", "direitos autorais", "franquia"],
+  "100502": ["licenciamento de software", "direitos autorais", "franquia"],
+  "100601": ["licenciamento de software", "direitos autorais", "franquia"],
+};
+
 async function loadIndopData() {
   try {
     const res = await fetch("indop-data.json");
     if (!res.ok) throw new Error("HTTP " + res.status);
     INDOP_DATA = await res.json();
+    INDOP_DATA.forEach(r => { r.exemplos = EXEMPLOS_INDOP[r.indOp] || []; });
     indopDataStatus = "ready";
   } catch (err) {
     indopDataStatus = "error";
@@ -635,7 +670,11 @@ function badgeHtml(cls, label) {
 // aparecem em algum dos campos, em qualquer ordem — assim "consulta médica"
 // acha "Consulta e clínica médica" e "consulta medica" (sem acento) também funciona.
 function normalize(str) {
-  return str.normalize("NFD").replace(new RegExp("[̀-ͯ]", "g"), "").toLowerCase();
+  return str
+    .normalize("NFD")
+    .replace(new RegExp("[̀-ͯ]", "g"), "")
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, ""); // ignora pontuação (., -, /, (), etc.) — deixa buscar "123011100" ou "consulta medica" sem se preocupar com formatação
 }
 // A tabela oficial usa termos técnicos (ex.: "odontológico", "advocacia") em vez
 // de termos do dia a dia (ex.: "dentista", "advogado"). Este mapa expande a busca
@@ -654,15 +693,27 @@ const SEARCH_SYNONYMS = {
   "palestrante": ["palestra", "conferencia"],
   "contador": ["contabil", "contabilidade"],
   "veterinario": ["veterinari"],
+  "consulta": ["clinic", "atendimento", "assessoria", "orientacao"],
 };
+
+// Tolera plural simples (consultas -> consulta) tirando um "s"/"es" final
+// antes de comparar, já que a busca é por substring e "consultas" não é
+// substring de "consulta médica".
+function singularize(w) {
+  if (w.length > 4 && w.endsWith("oes")) return w.slice(0, -3) + "ao";
+  if (w.length > 4 && w.endsWith("eis")) return w.slice(0, -3) + "el"; // imoveis -> imovel
+  if (w.length > 4 && w.endsWith("es")) return w.slice(0, -2);
+  if (w.length > 3 && w.endsWith("s")) return w.slice(0, -1);
+  return w;
+}
 
 function matchesQuery(query, ...fields) {
   const words = normalize(query).split(/\s+/).filter(Boolean);
   if (words.length === 0) return true;
   const haystack = normalize(fields.join(" "));
   return words.every(w => {
-    if (haystack.includes(w)) return true;
-    const alts = SEARCH_SYNONYMS[w];
+    if (haystack.includes(w) || haystack.includes(singularize(w))) return true;
+    const alts = SEARCH_SYNONYMS[w] || SEARCH_SYNONYMS[singularize(w)];
     return alts ? alts.some(a => haystack.includes(a)) : false;
   });
 }
@@ -822,7 +873,7 @@ function renderIndop(filter = "") {
   }
 
   const filtered = filter.trim()
-    ? INDOP_DATA.filter(r => matchesQuery(filter, r.tipoOperacao, r.caracteristica, r.localDfe, r.artigo, r.indOp))
+    ? INDOP_DATA.filter(r => matchesQuery(filter, r.tipoOperacao, r.caracteristica, r.localDfe, r.artigo, r.indOp, (r.exemplos || []).join(" ")))
     : INDOP_DATA;
 
   if (!filtered.length) {
@@ -844,7 +895,8 @@ function renderIndop(filter = "") {
         <span class="badge especial">Art. 11, ${r.artigo}</span>
       </div>
       <div class="desc" style="margin-bottom:4px;"><strong>Local da operação (regra geral):</strong> ${r.localOperacaoRegra}.</div>
-      <div class="desc" style="margin-bottom:0;"><strong>Endereço a identificar no DFe:</strong> ${r.localDfe}</div>
+      <div class="desc" style="${r.exemplos && r.exemplos.length ? 'margin-bottom:4px;' : 'margin-bottom:0;'}"><strong>Endereço a identificar no DFe:</strong> ${r.localDfe}</div>
+      ${r.exemplos && r.exemplos.length ? `<div class="desc" style="margin-bottom:0; color:var(--text-dim);"><strong>Exemplos:</strong> ${r.exemplos.join(", ")}</div>` : ""}
     </div>
   `).join("");
 }
