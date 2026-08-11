@@ -409,6 +409,7 @@ const UPDATE_LOG = [
   {
     date: "10/08/2026",
     changes: [
+      "Aba INDOP: revisados exemplos de conserto/reparo (050101-050104) para incluir 'celular' e 'eletrodoméstico' — os sinônimos globais não bastavam porque apontavam pra palavras que só existem no texto da tabela NBS, não no texto do INDOP.",
       "Adicionados sinônimos 'reparo'/'celular'/'eletrodoméstico' na busca de Códigos de Serviço (item 14.01 — manutenção/conserto de máquinas, veículos, aparelhos e equipamentos — já tinha 25 correlações na base oficial, só faltava vocabulário do dia a dia).",
       "Adicionado sinônimo 'fotógrafo'/'fotógrafa' na busca de Códigos de Serviço (o item 13.03 — fotografia e cinematografia — já estava completo na base oficial) e exemplos de sessão de fotos no estúdio vs. cobertura de evento no INDOP.",
       "Nova aba '📰 Novidades da Reforma' — o botão antigo 'Verificar atualizações' mostrava o changelog da própria ferramenta, mas o pedido era acompanhar mudanças regulatórias da reforma em si (prazos, prorrogações). Agora isso é uma aba própria com notícias reais (ex.: prorrogação do destaque de IBS/CBS de 01/08 para cronograma escalonado; início da nota de aluguel em jan/2027). O changelog da ferramenta continua existindo, só movido para um botão discreto no rodapé.",
@@ -521,10 +522,10 @@ const EXEMPLOS_INDOP = {
   "030103": ["casos em que o endereço de quem recebe o serviço (destinatário) é usado especificamente — ex.: convênio contrata, mas o local do paciente é o que determina o imposto"],
   "030104": ["endereço de terceiro que não é nem do prestador, nem de quem contratou, nem de quem recebeu o serviço"],
   "040101": ["organização de evento", "congresso", "feira de negócios", "show", "exposição"],
-  "050101": ["conserto de eletrônico", "manutenção de veículo", "assistência técnica"],
-  "050102": ["conserto de eletrônico", "manutenção de veículo", "assistência técnica"],
-  "050103": ["conserto de eletrônico", "manutenção de veículo", "assistência técnica"],
-  "050104": ["conserto de eletrônico", "manutenção de veículo", "assistência técnica"],
+  "050101": ["conserto de eletrônico na loja", "reparo de celular na assistência técnica", "conserto de eletrodoméstico na oficina", "manutenção de veículo na oficina mecânica"],
+  "050102": ["reparo de celular a domicílio", "conserto de eletrodoméstico a domicílio", "técnico que vai até a casa do cliente consertar"],
+  "050103": ["conserto entregue no endereço de quem recebe o serviço"],
+  "050104": ["conserto realizado em local de terceiro, que não é nem da assistência técnica nem do cliente"],
   "050201": ["serviço portuário"],
   "060101": ["uber", "táxi", "ônibus", "viagem aérea", "fretamento"],
   "070101": ["frete", "entrega", "motoboy", "transportadora"],
