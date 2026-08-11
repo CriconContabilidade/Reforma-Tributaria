@@ -409,6 +409,7 @@ const UPDATE_LOG = [
   {
     date: "10/08/2026",
     changes: [
+      "Adicionados sinônimos 'reparo'/'celular'/'eletrodoméstico' na busca de Códigos de Serviço (item 14.01 — manutenção/conserto de máquinas, veículos, aparelhos e equipamentos — já tinha 25 correlações na base oficial, só faltava vocabulário do dia a dia).",
       "Adicionado sinônimo 'fotógrafo'/'fotógrafa' na busca de Códigos de Serviço (o item 13.03 — fotografia e cinematografia — já estava completo na base oficial) e exemplos de sessão de fotos no estúdio vs. cobertura de evento no INDOP.",
       "Nova aba '📰 Novidades da Reforma' — o botão antigo 'Verificar atualizações' mostrava o changelog da própria ferramenta, mas o pedido era acompanhar mudanças regulatórias da reforma em si (prazos, prorrogações). Agora isso é uma aba própria com notícias reais (ex.: prorrogação do destaque de IBS/CBS de 01/08 para cronograma escalonado; início da nota de aluguel em jan/2027). O changelog da ferramenta continua existindo, só movido para um botão discreto no rodapé.",
       "CORREÇÃO: a busca 'idiomas' mostrava uma linha de redução de 60% que NÃO se aplica a escola de idiomas comum — o Anexo II da LC 214/2025 só reduz ensino de Libras/línguas indígenas, não línguas estrangeiras em geral. Adicionada nota explicando isso e apontando a linha certa (tributação integral).",
@@ -738,6 +739,9 @@ const SEARCH_SYNONYMS = {
   "idiomas": ["lingua"],
   "fotografo": ["fotograf"],
   "fotografa": ["fotograf"],
+  "reparo": ["reparaca"],
+  "celular": ["eletroeletronico", "telecomunicac"],
+  "eletrodomestico": ["eletroeletronico"],
 };
 
 // Tolera plural simples (consultas -> consulta) tirando um "s"/"es" final
