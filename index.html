@@ -357,21 +357,19 @@
   <!-- INDOP -->
   <section class="panel" id="panel-indop">
     <div class="info-box">
-      <strong>indOp (Indicador de Operação)</strong> é um código de 5 dígitos que diz, para fins de IBS/CBS, <strong>onde</strong> a operação é considerada realizada — e por consequência, qual Município/Estado tem direito ao imposto. Isso importa porque o IBS é cobrado no <strong>destino</strong>, não na origem: para cada tipo de serviço, a lei define um endereço de referência diferente (do imóvel, do prestador, do adquirente, do destinatário, do evento etc.), e é esse endereço que precisa ser identificado corretamente na nota. A base é o <strong>art. 11 da LC 214/2025</strong>.
+      <strong>indOp (Indicador de Operação)</strong> é um código de 6 dígitos que diz, para fins de IBS/CBS, <strong>onde</strong> a operação é considerada realizada — e por consequência, qual Município/Estado tem direito ao imposto. Isso importa porque o IBS é cobrado no <strong>destino</strong>, não na origem: para cada tipo de serviço, a lei define um endereço de referência diferente (do imóvel, do prestador, do adquirente, do destinatário, do evento etc.), e é esse endereço que precisa ser identificado corretamente na nota. Textos e códigos conforme o <strong>portal oficial de emissão</strong>, com base no art. 11 da LC 214/2025.
     </div>
     <div class="info-box" style="margin-bottom:18px;">
-      <strong>Serviço físico sobre a pessoa (saúde, beleza, estética etc.) tem 4 códigos possíveis</strong> — o que muda é <strong>onde</strong> o atendimento acontece em relação a quem presta e a quem paga: <strong>30101</strong> = no próprio estabelecimento do prestador (ex.: cirurgia no consultório/clínica do médico); <strong>30102</strong> = no endereço de quem contrata/paga (ex.: atendimento a domicílio pago pelo próprio paciente); <strong>30103</strong> = no endereço de quem recebe o serviço, quando é diferente de quem paga (ex.: convênio paga, mas o local é o do paciente); <strong>30104</strong> = em local de terceiros, diferente do prestador, do pagador e do paciente (ex.: cirurgia feita em hospital que não é do médico).
+      <strong>Serviço físico sobre a pessoa (saúde, beleza, estética etc.) tem 4 códigos possíveis</strong> — o que muda é <strong>onde</strong> o atendimento acontece: <strong>030101</strong> = no próprio estabelecimento do prestador (ex.: cirurgia no consultório/clínica do médico); <strong>030102</strong> = em local diferente do estabelecimento do prestador, sem se enquadrar nas hipóteses mais específicas abaixo (ex.: cirurgia realizada em hospital); <strong>030103</strong> = quando o endereço de quem recebe o serviço (destinatário) é usado especificamente para determinar o local; <strong>030104</strong> = em endereço de terceiro, que não é nem do prestador, nem de quem contratou, nem de quem recebeu o serviço. Na dúvida entre 030102, 030103 e 030104 num caso concreto, vale confirmar com a fonte oficial — a linha entre eles depende de detalhes do contrato/convênio.
     </div>
     <input type="text" class="search-box" id="searchIndop" placeholder="Buscar tipo de operação: ex. imóvel, transporte, evento, publicidade...">
     <div id="indopStatus" class="source-link" style="margin-bottom:10px;"></div>
     <div class="card-list" id="listIndop"></div>
     <div class="info-box" style="margin-top:22px; font-size:0.82rem;">
-      <strong>Notas de rodapé da tabela oficial:</strong><br>
+      <strong>Notas complementares do art. 11 (LC 214/2025):</strong><br>
       (1) Se o imóvel estiver em mais de um Município, considera-se local do imóvel o Município onde está a maior parte da área.<br>
-      (2) Serviços do inc. III, se parcialmente prestados à distância, seguem a regra do inc. X.<br>
-      (3) Em aquisições centralizadas por contribuinte do regime regular com mais de um estabelecimento (sem vedação de créditos), considera-se domicílio principal do adquirente o local do estabelecimento matriz.<br>
+      (2) Serviços do inc. III, se parcialmente prestados à distância, seguem a regra do inc. X (código 100301/100302).<br>
       (4) Aplica-se a regra do inc. X às operações de cessão de espaço para serviços publicitários.<br>
-      (5) Se o adquirente for residente/domiciliado no exterior e o destinatário no País, considera-se local da operação o domicílio do destinatário.<br>
       (6) Domicílio do destinatário: ver §3º do art. 11.
     </div>
     <p class="source-link" style="margin-top:14px;">Fonte: <a href="https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm" target="_blank" rel="noopener noreferrer">LC 214/2025, art. 11</a></p>
@@ -403,7 +401,7 @@ const UPDATE_LOG = [
   {
     date: "10/08/2026",
     changes: [
-      "Aba INDOP: adicionada explicação de quando usar cada um dos 4 códigos do serviço físico sobre pessoa (30101 a 30104) e exemplos diferenciando cirurgia feita na clínica do próprio médico (30101) de cirurgia feita em hospital de terceiros (30104).",
+      "Aba INDOP corrigida para bater com o portal oficial de emissão: códigos agora com 6 dígitos (ex. 020101 em vez de 20101) e texto de 'tipo de operação'/'local a identificar' atualizado em todas as 26 linhas — a mudança mais importante é o código 030102, que na planilha anterior estava como 'endereço do adquirente' e no portal é 'local da prestação diverso do estabelecimento do fornecedor' (mais genérico, cobre o caso de cirurgia em hospital). Quadro explicativo e exemplos revisados para refletir isso.",
       "Busca corrigida em 3 pontos: (1) removida a duplicação de resultados idênticos na tabela NBS — a planilha original enviada pelo escritório tinha 216 combinações repetidas (até 5x cada), agora com 1.062 linhas únicas em vez de 1.739; (2) busca agora ignora pontuação (dá pra digitar o código NBS sem os pontos, ex. '123011100'); (3) busca agora tolera plural (ex. 'consultas médicas' encontra 'consulta médica'), com sinônimo adicional para 'consulta' → clínica/atendimento/assessoria.",
       "Nova aba 'INDOP' com as 26 regras oficiais do art. 11 da LC 214/2025 que definem, por tipo de operação, qual endereço determina o Município/Estado que recebe o IBS — busca por tipo de serviço, com o código indOp, a regra geral e qual endereço precisa ser identificado na nota.",
       "Nova aba 'Perguntas Frequentes' com respostas detalhadas escritas nas conversas com o Claude (sem IA embutida na ferramenta em si, por questão de segurança — chave de API não pode ficar exposta num site estático). Primeira pergunta: o que muda no aluguel e quando começa a obrigação de nota fiscal.",
@@ -476,25 +474,25 @@ let indopDataStatus = "loading";
 // serviço. Este mapa liga exemplos do dia a dia a cada código indOp para a busca
 // funcionar com os termos que o usuário realmente digita.
 const EXEMPLOS_INDOP = {
-  "20101": ["aluguel de imóvel", "compra e venda de imóvel", "obra no imóvel"],
-  "20201": ["reforma", "pintura", "jardinagem", "dedetização", "limpeza de imóvel"],
-  "20301": ["corretagem imobiliária", "administração de aluguel"],
-  "30101": ["consulta médica", "consulta odontológica", "dentista", "cirurgia realizada na própria clínica do médico", "cirurgia no consultório", "corte de cabelo", "manicure", "fisioterapia", "massagem", "academia presencial", "personal trainer"],
-  "30102": ["consulta médica domiciliar", "atendimento a domicílio", "manicure a domicílio", "personal trainer a domicílio", "home care pago pelo próprio paciente"],
-  "30103": ["cirurgia paga por convênio mas realizada em local do paciente", "exame feito no endereço de quem recebe o serviço quando difere de quem paga"],
-  "30104": ["cirurgia realizada em hospital de terceiros", "cirurgia em hospital que não é do médico nem do paciente", "procedimento em clínica conveniada de terceiros"],
-  "40101": ["organização de evento", "congresso", "feira de negócios", "show", "exposição"],
-  "50101": ["conserto de eletrônico", "manutenção de veículo", "assistência técnica"],
-  "50102": ["conserto de eletrônico", "manutenção de veículo", "assistência técnica"],
-  "50103": ["conserto de eletrônico", "manutenção de veículo", "assistência técnica"],
-  "50104": ["conserto de eletrônico", "manutenção de veículo", "assistência técnica"],
-  "50201": ["serviço portuário"],
-  "60101": ["uber", "táxi", "ônibus", "viagem aérea", "fretamento"],
-  "70101": ["frete", "entrega", "motoboy", "transportadora"],
-  "70102": ["frete", "entrega", "motoboy", "transportadora"],
-  "80101": ["pedágio"],
-  "100101": ["outdoor", "painel publicitário", "anúncio em ônibus"],
-  "100102": ["outdoor", "painel publicitário", "anúncio em ônibus"],
+  "020101": ["aluguel de imóvel", "compra e venda de imóvel", "obra no imóvel"],
+  "020201": ["reforma", "pintura", "jardinagem", "dedetização", "limpeza de imóvel"],
+  "020301": ["corretagem imobiliária", "administração de aluguel"],
+  "030101": ["consulta médica", "consulta odontológica", "dentista", "cirurgia realizada na própria clínica do médico", "cirurgia no consultório", "corte de cabelo", "manicure", "fisioterapia", "massagem", "academia presencial", "personal trainer"],
+  "030102": ["cirurgia realizada em hospital", "atendimento fora do consultório do médico, sem endereço mais específico aplicável", "manicure a domicílio", "personal trainer a domicílio", "home care"],
+  "030103": ["casos em que o endereço de quem recebe o serviço (destinatário) é usado especificamente — ex.: convênio contrata, mas o local do paciente é o que determina o imposto"],
+  "030104": ["endereço de terceiro que não é nem do prestador, nem de quem contratou, nem de quem recebeu o serviço"],
+  "040101": ["organização de evento", "congresso", "feira de negócios", "show", "exposição"],
+  "050101": ["conserto de eletrônico", "manutenção de veículo", "assistência técnica"],
+  "050102": ["conserto de eletrônico", "manutenção de veículo", "assistência técnica"],
+  "050103": ["conserto de eletrônico", "manutenção de veículo", "assistência técnica"],
+  "050104": ["conserto de eletrônico", "manutenção de veículo", "assistência técnica"],
+  "050201": ["serviço portuário"],
+  "060101": ["uber", "táxi", "ônibus", "viagem aérea", "fretamento"],
+  "070101": ["frete", "entrega", "motoboy", "transportadora"],
+  "070102": ["frete", "entrega", "motoboy", "transportadora"],
+  "080101": ["pedágio"],
+  "100101": ["outdoor", "painel publicitário", "anúncio em ônibus", "publicidade paga pelo adquirente"],
+  "100102": ["outdoor", "painel publicitário", "anúncio em ônibus", "publicidade com adquirente no exterior"],
   "100201": ["outdoor sem cobrança", "publicidade institucional"],
   "100301": ["consultoria remota", "telemedicina", "aula online", "curso ead", "contabilidade", "advocacia", "ti", "design gráfico à distância", "mentoria online", "consultoria financeira"],
   "100302": ["consultoria remota", "telemedicina", "aula online", "curso ead", "contabilidade", "advocacia", "ti", "design gráfico à distância", "mentoria online"],
