@@ -409,6 +409,7 @@ const UPDATE_LOG = [
   {
     date: "10/08/2026",
     changes: [
+      "Adicionado sinônimo 'fotógrafo'/'fotógrafa' na busca de Códigos de Serviço (o item 13.03 — fotografia e cinematografia — já estava completo na base oficial) e exemplos de sessão de fotos no estúdio vs. cobertura de evento no INDOP.",
       "Nova aba '📰 Novidades da Reforma' — o botão antigo 'Verificar atualizações' mostrava o changelog da própria ferramenta, mas o pedido era acompanhar mudanças regulatórias da reforma em si (prazos, prorrogações). Agora isso é uma aba própria com notícias reais (ex.: prorrogação do destaque de IBS/CBS de 01/08 para cronograma escalonado; início da nota de aluguel em jan/2027). O changelog da ferramenta continua existindo, só movido para um botão discreto no rodapé.",
       "CORREÇÃO: a busca 'idiomas' mostrava uma linha de redução de 60% que NÃO se aplica a escola de idiomas comum — o Anexo II da LC 214/2025 só reduz ensino de Libras/línguas indígenas, não línguas estrangeiras em geral. Adicionada nota explicando isso e apontando a linha certa (tributação integral).",
       "Adicionados exemplos de aula presencial/escola de idiomas no INDOP (030101/030102) e sinônimo 'idiomas' → 'línguas' na busca de Códigos de Serviço, que já tem o item certo na base oficial (NBS 1.2205.13.00 — Serviços de educação em línguas estrangeiras, redução de 60%).",
@@ -514,8 +515,8 @@ const EXEMPLOS_INDOP = {
   "020101": ["aluguel de imóvel", "compra e venda de imóvel", "obra no imóvel"],
   "020201": ["reforma", "pintura", "jardinagem", "dedetização", "limpeza de imóvel"],
   "020301": ["corretagem imobiliária", "administração de aluguel"],
-  "030101": ["consulta médica", "consulta odontológica", "dentista", "cirurgia realizada na própria clínica do médico", "cirurgia no consultório", "corte de cabelo", "manicure", "fisioterapia", "massagem", "academia presencial", "personal trainer", "aula presencial", "aula de idiomas", "curso de idiomas presencial", "escola de línguas"],
-  "030102": ["cirurgia realizada em hospital", "atendimento fora do consultório do médico, sem endereço mais específico aplicável", "manicure a domicílio", "personal trainer a domicílio", "home care", "aula particular a domicílio", "aula de idiomas fora da escola"],
+  "030101": ["consulta médica", "consulta odontológica", "dentista", "cirurgia realizada na própria clínica do médico", "cirurgia no consultório", "corte de cabelo", "manicure", "fisioterapia", "massagem", "academia presencial", "personal trainer", "aula presencial", "aula de idiomas", "curso de idiomas presencial", "escola de línguas", "sessão de fotos no estúdio do fotógrafo", "ensaio fotográfico no estúdio"],
+  "030102": ["cirurgia realizada em hospital", "atendimento fora do consultório do médico, sem endereço mais específico aplicável", "manicure a domicílio", "personal trainer a domicílio", "home care", "aula particular a domicílio", "aula de idiomas fora da escola", "cobertura fotográfica de casamento ou evento", "ensaio fotográfico externo"],
   "030103": ["casos em que o endereço de quem recebe o serviço (destinatário) é usado especificamente — ex.: convênio contrata, mas o local do paciente é o que determina o imposto"],
   "030104": ["endereço de terceiro que não é nem do prestador, nem de quem contratou, nem de quem recebeu o serviço"],
   "040101": ["organização de evento", "congresso", "feira de negócios", "show", "exposição"],
@@ -735,6 +736,8 @@ const SEARCH_SYNONYMS = {
   "consulta": ["clinic", "atendimento", "assessoria", "orientacao"],
   "idioma": ["lingua"],
   "idiomas": ["lingua"],
+  "fotografo": ["fotograf"],
+  "fotografa": ["fotograf"],
 };
 
 // Tolera plural simples (consultas -> consulta) tirando um "s"/"es" final
