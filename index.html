@@ -401,6 +401,7 @@ const UPDATE_LOG = [
   {
     date: "10/08/2026",
     changes: [
+      "CORREÇÃO: a busca 'idiomas' mostrava uma linha de redução de 60% que NÃO se aplica a escola de idiomas comum — o Anexo II da LC 214/2025 só reduz ensino de Libras/línguas indígenas, não línguas estrangeiras em geral. Adicionada nota explicando isso e apontando a linha certa (tributação integral).",
       "Adicionados exemplos de aula presencial/escola de idiomas no INDOP (030101/030102) e sinônimo 'idiomas' → 'línguas' na busca de Códigos de Serviço, que já tem o item certo na base oficial (NBS 1.2205.13.00 — Serviços de educação em línguas estrangeiras, redução de 60%).",
       "Aba INDOP corrigida para bater com o portal oficial de emissão: códigos agora com 6 dígitos (ex. 020101 em vez de 20101) e texto de 'tipo de operação'/'local a identificar' atualizado em todas as 26 linhas — a mudança mais importante é o código 030102, que na planilha anterior estava como 'endereço do adquirente' e no portal é 'local da prestação diverso do estabelecimento do fornecedor' (mais genérico, cobre o caso de cirurgia em hospital). Quadro explicativo e exemplos revisados para refletir isso.",
       "Busca corrigida em 3 pontos: (1) removida a duplicação de resultados idênticos na tabela NBS — a planilha original enviada pelo escritório tinha 216 combinações repetidas (até 5x cada), agora com 1.062 linhas únicas em vez de 1.739; (2) busca agora ignora pontuação (dá pra digitar o código NBS sem os pontos, ex. '123011100'); (3) busca agora tolera plural (ex. 'consultas médicas' encontra 'consulta médica'), com sinônimo adicional para 'consulta' → clínica/atendimento/assessoria.",
@@ -743,6 +744,12 @@ const CODIGOS_NOTAS_ESPECIAIS = [
     desc: "Recebimento de dividendos e mera titularidade de participação societária não é prestação de serviço — não há incidência de IBS/CBS nem código NBS/LC 116 aqui. Se a holding também presta serviços de gestão/administração às empresas do grupo, busque por 'gestão de investimentos' ou 'consultoria financeira' para achar o código dessa parte.",
     keywords: "holding participacao societaria dividendos",
     source: { label: "LC 214/2025 — confirmar enquadramento no caso concreto", url: "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm" }
+  },
+  {
+    servico: "Ensino de idiomas / línguas estrangeiras (redução NÃO se aplica)",
+    desc: "O NBS 1.2205.13.00 aparece na tabela com duas linhas — uma com redução de 60% e outra com tributação integral — porque esse código NBS engloba tanto 'línguas estrangeiras' quanto 'língua de sinais'/línguas indígenas. O Anexo II da LC 214/2025 é uma lista taxativa: só dá redução de 60% para (item 7) ensino de sistemas linguísticos visomotores e de escrita tátil (Libras) e (item 8) ensino de línguas nativas de povos originários. Escola de idiomas comum (inglês, espanhol, francês etc.) NÃO está no Anexo II — use a linha de tributação integral (CST 000 / cClassTrib 000001), não a de redução.",
+    keywords: "idioma idiomas lingua linguas estrangeira escola de idiomas ingles espanhol frances curso livre",
+    source: { label: "LC 214/2025, Anexo II, itens 7 e 8", url: "https://modeloinicial.com.br/lei/LCP-214-2025/anexo-ii-servicos-educacao-submetidos-a-reducao-60-sessenta-cento-aliquotas-ibs-da-cbs-@AII" }
   }
 ];
 
