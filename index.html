@@ -401,6 +401,7 @@ const UPDATE_LOG = [
   {
     date: "10/08/2026",
     changes: [
+      "Adicionados exemplos de aula presencial/escola de idiomas no INDOP (030101/030102) e sinônimo 'idiomas' → 'línguas' na busca de Códigos de Serviço, que já tem o item certo na base oficial (NBS 1.2205.13.00 — Serviços de educação em línguas estrangeiras, redução de 60%).",
       "Aba INDOP corrigida para bater com o portal oficial de emissão: códigos agora com 6 dígitos (ex. 020101 em vez de 20101) e texto de 'tipo de operação'/'local a identificar' atualizado em todas as 26 linhas — a mudança mais importante é o código 030102, que na planilha anterior estava como 'endereço do adquirente' e no portal é 'local da prestação diverso do estabelecimento do fornecedor' (mais genérico, cobre o caso de cirurgia em hospital). Quadro explicativo e exemplos revisados para refletir isso.",
       "Busca corrigida em 3 pontos: (1) removida a duplicação de resultados idênticos na tabela NBS — a planilha original enviada pelo escritório tinha 216 combinações repetidas (até 5x cada), agora com 1.062 linhas únicas em vez de 1.739; (2) busca agora ignora pontuação (dá pra digitar o código NBS sem os pontos, ex. '123011100'); (3) busca agora tolera plural (ex. 'consultas médicas' encontra 'consulta médica'), com sinônimo adicional para 'consulta' → clínica/atendimento/assessoria.",
       "Nova aba 'INDOP' com as 26 regras oficiais do art. 11 da LC 214/2025 que definem, por tipo de operação, qual endereço determina o Município/Estado que recebe o IBS — busca por tipo de serviço, com o código indOp, a regra geral e qual endereço precisa ser identificado na nota.",
@@ -477,8 +478,8 @@ const EXEMPLOS_INDOP = {
   "020101": ["aluguel de imóvel", "compra e venda de imóvel", "obra no imóvel"],
   "020201": ["reforma", "pintura", "jardinagem", "dedetização", "limpeza de imóvel"],
   "020301": ["corretagem imobiliária", "administração de aluguel"],
-  "030101": ["consulta médica", "consulta odontológica", "dentista", "cirurgia realizada na própria clínica do médico", "cirurgia no consultório", "corte de cabelo", "manicure", "fisioterapia", "massagem", "academia presencial", "personal trainer"],
-  "030102": ["cirurgia realizada em hospital", "atendimento fora do consultório do médico, sem endereço mais específico aplicável", "manicure a domicílio", "personal trainer a domicílio", "home care"],
+  "030101": ["consulta médica", "consulta odontológica", "dentista", "cirurgia realizada na própria clínica do médico", "cirurgia no consultório", "corte de cabelo", "manicure", "fisioterapia", "massagem", "academia presencial", "personal trainer", "aula presencial", "aula de idiomas", "curso de idiomas presencial", "escola de línguas"],
+  "030102": ["cirurgia realizada em hospital", "atendimento fora do consultório do médico, sem endereço mais específico aplicável", "manicure a domicílio", "personal trainer a domicílio", "home care", "aula particular a domicílio", "aula de idiomas fora da escola"],
   "030103": ["casos em que o endereço de quem recebe o serviço (destinatário) é usado especificamente — ex.: convênio contrata, mas o local do paciente é o que determina o imposto"],
   "030104": ["endereço de terceiro que não é nem do prestador, nem de quem contratou, nem de quem recebeu o serviço"],
   "040101": ["organização de evento", "congresso", "feira de negócios", "show", "exposição"],
@@ -696,6 +697,8 @@ const SEARCH_SYNONYMS = {
   "contador": ["contabil", "contabilidade"],
   "veterinario": ["veterinari"],
   "consulta": ["clinic", "atendimento", "assessoria", "orientacao"],
+  "idioma": ["lingua"],
+  "idiomas": ["lingua"],
 };
 
 // Tolera plural simples (consultas -> consulta) tirando um "s"/"es" final
