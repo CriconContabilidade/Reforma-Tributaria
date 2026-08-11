@@ -291,15 +291,9 @@
     <strong>⚠️ Uso interno / apoio à consulta.</strong> Dados de referência com base na EC 132/2023 e na LC 214/2025, organizados para consulta rápida do escritório. A regulamentação segue em atualização (resoluções do CGIBS, instruções normativas da RFB). Cada item traz a fonte oficial — confirme antes de aplicar em um caso concreto.
   </div>
 
-  <div class="update-bar">
-    <span id="updateStatus">Dados desta ferramenta atualizados em <strong style="color:var(--text)">10/08/2026</strong></span>
-    <button id="checkUpdateBtn">🔄 Verificar atualizações</button>
-  </div>
-
-  <div id="updateReport"></div>
-
   <nav class="tabs">
-    <button data-tab="cronograma" class="active">🗓️ Cronograma</button>
+    <button data-tab="novidades" class="active">📰 Novidades da Reforma</button>
+    <button data-tab="cronograma">🗓️ Cronograma</button>
     <button data-tab="codigos">🔎 Códigos de Serviço</button>
     <button data-tab="tributacao">🧾 Tributação de Serviços</button>
     <button data-tab="seletivo">🚬 Imposto Seletivo</button>
@@ -308,8 +302,17 @@
     <button data-tab="faq">❓ Perguntas Frequentes</button>
   </nav>
 
+  <!-- NOVIDADES DA REFORMA -->
+  <section class="panel active" id="panel-novidades">
+    <div class="info-box">
+      Aqui ficam as <strong>notícias regulatórias da reforma</strong> — prazos que mudaram, prorrogações, novos atos do CGIBS/RFB — não confundir com mudanças na ferramenta em si. Quando sair uma novidade relevante, peça no chat do Claude pra eu pesquisar e adicionar aqui.
+    </div>
+    <input type="text" class="search-box" id="searchNovidades" placeholder="Buscar novidade: ex. prorrogação, aluguel, cronograma, NFS-e...">
+    <div class="card-list" id="listNovidades"></div>
+  </section>
+
   <!-- CRONOGRAMA -->
-  <section class="panel active" id="panel-cronograma">
+  <section class="panel" id="panel-cronograma">
     <div class="info-box">
       A transição do sistema atual (PIS, Cofins, IPI, ICMS e ISS) para o IVA Dual (CBS + IBS) acontece de forma gradual entre 2026 e 2033, conforme <strong>EC 132/2023</strong> (art. 125-126 do ADCT) e <strong>LC 214/2025</strong>. O Imposto Seletivo (IS) começa a valer em 2027.
     </div>
@@ -384,7 +387,12 @@
     <div class="card-list" id="listFaq"></div>
   </section>
 
-  <footer>Para atualizar os dados, peça no chat do Claude — a ferramenta guarda o histórico de mudanças no botão "Verificar atualizações".</footer>
+  <footer>
+    Para atualizar os dados, peça no chat do Claude.
+    <br>
+    <button id="checkUpdateBtn" style="background:none; border:1px solid var(--border); color:var(--text-dim); border-radius:8px; padding:5px 10px; font-size:0.78rem; cursor:pointer; margin-top:8px;">Ver histórico de manutenção da ferramenta</button>
+    <div id="updateReport" style="text-align:left; max-width:600px; margin:14px auto 0;"></div>
+  </footer>
 </div>
 
 <script>
@@ -401,6 +409,7 @@ const UPDATE_LOG = [
   {
     date: "10/08/2026",
     changes: [
+      "Nova aba '📰 Novidades da Reforma' — o botão antigo 'Verificar atualizações' mostrava o changelog da própria ferramenta, mas o pedido era acompanhar mudanças regulatórias da reforma em si (prazos, prorrogações). Agora isso é uma aba própria com notícias reais (ex.: prorrogação do destaque de IBS/CBS de 01/08 para cronograma escalonado; início da nota de aluguel em jan/2027). O changelog da ferramenta continua existindo, só movido para um botão discreto no rodapé.",
       "CORREÇÃO: a busca 'idiomas' mostrava uma linha de redução de 60% que NÃO se aplica a escola de idiomas comum — o Anexo II da LC 214/2025 só reduz ensino de Libras/línguas indígenas, não línguas estrangeiras em geral. Adicionada nota explicando isso e apontando a linha certa (tributação integral).",
       "Adicionados exemplos de aula presencial/escola de idiomas no INDOP (030101/030102) e sinônimo 'idiomas' → 'línguas' na busca de Códigos de Serviço, que já tem o item certo na base oficial (NBS 1.2205.13.00 — Serviços de educação em línguas estrangeiras, redução de 60%).",
       "Aba INDOP corrigida para bater com o portal oficial de emissão: códigos agora com 6 dígitos (ex. 020101 em vez de 20101) e texto de 'tipo de operação'/'local a identificar' atualizado em todas as 26 linhas — a mudança mais importante é o código 030102, que na planilha anterior estava como 'endereço do adquirente' e no portal é 'local da prestação diverso do estabelecimento do fornecedor' (mais genérico, cobre o caso de cirurgia em hospital). Quadro explicativo e exemplos revisados para refletir isso.",
@@ -413,6 +422,32 @@ const UPDATE_LOG = [
       "Aba 'Códigos de Serviço' passou a buscar pelo código NBS (Nomenclatura Brasileira de Serviços) de cada serviço, que substitui a lista da LC 116/2003 como referência da nova NFS-e nacional. Base inicial com 16 serviços comuns (saúde, contabilidade/auditoria/consultoria tributária, jurídico, TI/software, locação de imóveis, educação), cada um com o código NBS e a fonte.",
       "Criação da ferramenta com dados iniciais: cronograma 2026-2033, regras gerais de tributação de serviços, lista do Imposto Seletivo e regimes diferenciados/benefícios fiscais da LC 214/2025.",
       "Alíquota de referência incluída conforme Resolução CGIBS nº 14/2026 (27,91% — IBS 18,7% + CBS 9,21%)."
+    ]
+  }
+];
+
+// Notícias regulatórias da reforma (prazos, prorrogações, novos atos) — diferente
+// do UPDATE_LOG acima, que é o changelog da ferramenta em si. Ordenado do mais
+// recente para o mais antigo (sortDate no formato AAAA-MM-DD).
+const REFORMA_NOVIDADES = [
+  {
+    sortDate: "2026-08-01",
+    data: "01/08/2026",
+    titulo: "Destaque obrigatório de IBS/CBS na nota fiscal foi prorrogado e passou a ser escalonado por tipo de documento",
+    resumo: "O início da obrigatoriedade de destacar IBS e CBS nos documentos fiscais, antes previsto para 1º/08/2026 (depois ajustado para 3/08), não vale mais numa data única — o Ato Conjunto RFB/CGIBS nº 4/2026 escalonou por tipo de documento: NFe, NFCe, CTe, BPe, MDFe e demais documentos principais a partir de 03/08/2026; NFCom e a maior parte das NFS-e sujeitas ao ISS a partir de 01/10/2026; eventos periódicos mensais do DeRE (balancete mensal, aplicações financeiras) a partir de 15/11/2026; NFS-e especializadas (plataformas digitais, data centers, imobiliárias), BPe de transporte aéreo e notas de utilidades (NFGas, NFAg) a partir de 01/12/2026; Duimp, emissão obrigatória de documento eletrônico para optantes do Simples Nacional e NFe de operações monofásicas a partir de 01/01/2027. Os layouts técnicos de cada fase são divulgados com no mínimo 60 dias de antecedência.",
+    fontes: [
+      { label: "CGIBS — Novo marco da Reforma Tributária", url: "https://www.cgibs.gov.br/novo-marco-da-reforma-tributaria-inicia-em-03-de-agosto-com-preenchimento-obrigatorio-dos-campos-relativos-ao-ibs-e-a-cbs" },
+      { label: "ReformaTributaria.com — cronograma em 3 lotes", url: "https://www.reformatributaria.com/documentos-fiscais/receita-e-comite-gestor-publicam-cronograma-em-3-lotes-para-inicio-da-obrigatoriedade-de-destaques-de-ibs-cbs-leia/" }
+    ]
+  },
+  {
+    sortDate: "2026-08-10",
+    data: "10/08/2026",
+    titulo: "Emissão de nota fiscal para aluguel de pessoa física: obrigação começa em janeiro/2027, com testes a partir de novembro/2026",
+    resumo: "Pessoa física que aluga imóveis e se enquadra como contribuinte de IBS/CBS (receita de locação acima de R$ 240.000/ano com mais de 3 imóveis, ou acima de R$ 288.000 no próprio ano-calendário) vai precisar se inscrever no CNPJ e emitir NFS-e a partir de 1º/01/2027. Antes disso, a Receita Federal deve liberar em novembro/2026 um ambiente digital simplificado com sandbox de testes para quem for se adaptar. Quem aluga poucos imóveis abaixo desses limites continua fora do novo regime, só declarando no IR como sempre.",
+    fontes: [
+      { label: "LC 214/2025", url: "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp214.htm" },
+      { label: "Assecont — NFS-e para Aluguel", url: "https://assecont.com.br/nfs-e-locacao-bens-moveis-imoveis-reforma-tributaria/" }
     ]
   }
 ];
@@ -724,6 +759,25 @@ function matchesQuery(query, ...fields) {
   });
 }
 
+function renderNovidades(filter = "") {
+  const el = document.getElementById("listNovidades");
+  const sorted = [...REFORMA_NOVIDADES].sort((a, b) => b.sortDate.localeCompare(a.sortDate));
+  const filtered = filter.trim()
+    ? sorted.filter(n => matchesQuery(filter, n.titulo, n.resumo))
+    : sorted;
+
+  el.innerHTML = filtered.length ? filtered.map(n => `
+    <div class="item-card">
+      <div class="top-row">
+        <div class="title">${n.titulo}</div>
+        <span class="badge especial">${n.data}</span>
+      </div>
+      <div class="desc">${n.resumo}</div>
+      <div class="source-link">Fontes: ${n.fontes.map(s => `<a href="${s.url}" target="_blank" rel="noopener noreferrer">${s.label}</a>`).join(" · ")}</div>
+    </div>
+  `).join("") : `<div class="empty">Nenhuma novidade encontrada com esse termo.</div>`;
+}
+
 function renderTimeline() {
   const el = document.getElementById("timelineList");
   el.innerHTML = CRONOGRAMA.map(item => `
@@ -944,6 +998,7 @@ document.getElementById("searchCodigos").addEventListener("input", e => renderCo
 document.getElementById("searchTributacao").addEventListener("input", e => renderTributacao(e.target.value));
 document.getElementById("searchBeneficios").addEventListener("input", e => renderBeneficios(e.target.value));
 document.getElementById("searchIndop").addEventListener("input", e => renderIndop(e.target.value));
+document.getElementById("searchNovidades").addEventListener("input", e => renderNovidades(e.target.value));
 document.getElementById("searchFaq").addEventListener("input", e => renderFaq(e.target.value));
 
 // ---------- Botão de atualização ----------
@@ -952,11 +1007,9 @@ document.getElementById("checkUpdateBtn").addEventListener("click", () => {
   const report = document.getElementById("updateReport");
   const latest = UPDATE_LOG[0];
   report.innerHTML = `
-    <h3>📋 Relatório de atualizações</h3>
+    <h3>🛠️ Histórico de manutenção da ferramenta</h3>
     <p style="color:var(--text-dim); margin-top:0;">
-      Esta ferramenta é estática (GitHub Pages) e não busca dados sozinha na Receita Federal em tempo real.
-      Quando você pedir uma atualização no chat, os dados abaixo e as fontes são revisados e uma nova entrada
-      é adicionada aqui.
+      Isto é o changelog do site em si (novas abas, correções de busca etc.) — para novidades da reforma tributária, veja a aba "📰 Novidades da Reforma".
     </p>
     <ul>
       ${UPDATE_LOG.map(entry => `
@@ -972,6 +1025,7 @@ document.getElementById("checkUpdateBtn").addEventListener("click", () => {
 
 // ---------- Inicialização ----------
 
+renderNovidades();
 renderTimeline();
 loadNbsData();
 loadIndopData();
