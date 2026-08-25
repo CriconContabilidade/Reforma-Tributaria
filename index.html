@@ -403,9 +403,15 @@
 //  entrada em UPDATE_LOG, além de ajustar os dados abaixo.
 // ==================================================================
 
-const LAST_UPDATED = "10/08/2026";
+const LAST_UPDATED = "24/08/2026";
 
 const UPDATE_LOG = [
+  {
+    date: "24/08/2026",
+    changes: [
+      "Aba INDOP: adicionado exemplo de fisioterapia executada em estabelecimento de terceiros (academia ou clínica parceira, fora do consultório do fisioterapeuta) no indOp 030102 — mesma regra já aplicada a cirurgia em hospital e atendimento fora do consultório."
+    ]
+  },
   {
     date: "10/08/2026",
     changes: [
@@ -519,7 +525,7 @@ const EXEMPLOS_INDOP = {
   "020201": ["reforma", "pintura", "jardinagem", "dedetização", "limpeza de imóvel", "serviço elétrico", "instalação elétrica", "eletricista", "manutenção elétrica predial"],
   "020301": ["corretagem imobiliária", "administração de aluguel"],
   "030101": ["consulta médica", "consulta odontológica", "dentista", "cirurgia realizada na própria clínica do médico", "cirurgia no consultório", "corte de cabelo", "manicure", "fisioterapia", "massagem", "academia presencial", "personal trainer", "aula presencial", "aula de idiomas", "curso de idiomas presencial", "escola de línguas", "sessão de fotos no estúdio do fotógrafo", "ensaio fotográfico no estúdio"],
-  "030102": ["cirurgia realizada em hospital", "atendimento fora do consultório do médico, sem endereço mais específico aplicável", "manicure a domicílio", "personal trainer a domicílio", "home care", "aula particular a domicílio", "aula de idiomas fora da escola", "cobertura fotográfica de casamento ou evento", "ensaio fotográfico externo"],
+  "030102": ["cirurgia realizada em hospital", "atendimento fora do consultório do médico, sem endereço mais específico aplicável", "manicure a domicílio", "personal trainer a domicílio", "home care", "aula particular a domicílio", "aula de idiomas fora da escola", "cobertura fotográfica de casamento ou evento", "ensaio fotográfico externo", "fisioterapia executada em estabelecimento de terceiros (ex.: academia ou clínica parceira, fora do consultório do fisioterapeuta)"],
   "030103": ["casos em que o endereço de quem recebe o serviço (destinatário) é usado especificamente — ex.: convênio contrata, mas o local do paciente é o que determina o imposto"],
   "030104": ["endereço de terceiro que não é nem do prestador, nem de quem contratou, nem de quem recebeu o serviço"],
   "040101": ["organização de evento", "congresso", "feira de negócios", "show", "exposição"],
