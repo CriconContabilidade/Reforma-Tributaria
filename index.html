@@ -441,6 +441,26 @@ const UPDATE_LOG = [
 // recente para o mais antigo (sortDate no formato AAAA-MM-DD).
 const REFORMA_NOVIDADES = [
   {
+    sortDate: "2026-09-01",
+    data: "01/09/2026",
+    titulo: "Simples Nacional: abriu o prazo para optar pelo regime regular de IBS/CBS em 2027",
+    resumo: "Entre 1º e 30 de setembro de 2026, empresas do Simples Nacional fazem, pelo Portal do Simples Nacional, duas opções com efeito a partir de 1º/01/2027: (1) a opção anual pelo próprio Simples Nacional para 2027; e (2), só para quem quiser, a opção pelo regime regular de apuração e recolhimento do IBS e da CBS — ou seja, apurar e pagar IBS/CBS por fora do DAS, com direito a aproveitar crédito nas compras, em vez de recolher tudo dentro da guia única. Essa segunda opção, criada pela Resolução CGSN nº 186/2026, vale só para o 1º semestre de 2027 (janeiro a junho). Pode ser cancelada até o último dia útil de novembro/2026. Vale avaliar com cada cliente do Simples, antes do fim do prazo, se compensa sair do recolhimento unificado do IBS/CBS — normalmente faz sentido para quem vende bastante para empresas que aproveitam crédito de IBS/CBS.",
+    fontes: [
+      { label: "Receita Federal — CGSN define prazos de opção pelo Simples Nacional e pelo regime regular do IBS/CBS", url: "https://www.gov.br/receitafederal/pt-br/assuntos/noticias/2026/abril/cgsn-define-prazos-de-opcao-pelo-simples-nacional-e-pelo-regime-regular-do-ibs-e-da-cbs-para-2027" },
+      { label: "Resolução CGSN nº 186/2026", url: "https://www.normaslegais.com.br/legislacao/resolucao-cgsn-186-2026.htm" }
+    ]
+  },
+  {
+    sortDate: "2026-08-13",
+    data: "13/08/2026",
+    titulo: "Receita Federal e CGIBS criam Programa Nacional de Conformidade Tributária: erro no preenchimento de IBS/CBS em 2026 não gera punição imediata",
+    resumo: "O Ato Conjunto RFB/CGIBS nº 5/2026 (assinado em 12/08, publicado no DOU em 13/08/2026) regulamenta o Programa Nacional de Conformidade Tributária (PNCT) para 2026. Em vez de multar de imediato quem errar no preenchimento dos campos de IBS/CBS nas notas fiscais durante o ano de testes, a Receita e o CGIBS vão priorizar orientação e correção. Para continuar no programa — e não ser tratado como se tivesse agido de má-fé — a empresa precisa: mostrar melhora contínua na emissão correta dos documentos fiscais, responder prontamente a comunicações e notificações do Fisco, corrigir as inconsistências identificadas até 31/12/2026, e manter um profissional de contabilidade responsável pela conformidade tributária. Reforça a importância de documentar e corrigir erros de preenchimento de IBS/CBS ao longo do ano, em vez de deixar acumular para o fim de 2026.",
+    fontes: [
+      { label: "CGIBS — Ato Conjunto RFB/CGIBS nº 5/2026 (texto oficial em PDF)", url: "https://www.cgibs.gov.br/upload/arquivos/202608/13065932-ato-conjunto-rfb-cgibs-n-c2-ba-5-2026-regulamenta-o-programa-nacional-de-conformidade-tributaria-docx-assinado.pdf" },
+      { label: "FENACON — Receita Federal e CGIBS regulamentam programa de conformidade", url: "https://fenacon.org.br/reforma-tributaria/receita-federal-e-cgibs-regulamentam-programa-de-conformidade-para-adaptacao-a-reforma-tributaria/" }
+    ]
+  },
+  {
     sortDate: "2026-08-01",
     data: "01/08/2026",
     titulo: "Destaque obrigatório de IBS/CBS na nota fiscal foi prorrogado e passou a ser escalonado por tipo de documento",
@@ -541,8 +561,8 @@ const EXEMPLOS_INDOP = {
   "100101": ["outdoor", "painel publicitário", "anúncio em ônibus", "publicidade paga pelo adquirente"],
   "100102": ["outdoor", "painel publicitário", "anúncio em ônibus", "publicidade com adquirente no exterior"],
   "100201": ["outdoor sem cobrança", "publicidade institucional"],
-  "100301": ["consultoria remota", "telemedicina", "aula online", "curso ead", "contabilidade", "advocacia", "ti", "design gráfico à distância", "mentoria online", "consultoria financeira"],
-  "100302": ["consultoria remota", "telemedicina", "aula online", "curso ead", "contabilidade", "advocacia", "ti", "design gráfico à distância", "mentoria online"],
+  "100301": ["consultoria remota", "telemedicina", "aula online", "curso ead", "contabilidade", "advocacia", "ti", "design gráfico à distância", "mentoria online", "consultoria financeira", "corretagem de seguros", "corretor de seguros", "corretora de seguros", "agenciamento de seguros", "resseguro", "corretagem de plano de saúde", "corretagem de previdência privada", "assessoria empresarial", "consultoria empresarial"],
+  "100302": ["consultoria remota", "telemedicina", "aula online", "curso ead", "contabilidade", "advocacia", "ti", "design gráfico à distância", "mentoria online", "corretagem de seguros", "corretor de seguros", "corretora de seguros", "agenciamento de seguros", "resseguro", "assessoria empresarial", "consultoria empresarial"],
   "100401": ["consultoria remota", "telemedicina", "aula online", "curso ead"],
   "100501": ["licenciamento de software", "direitos autorais", "franquia"],
   "100502": ["licenciamento de software", "direitos autorais", "franquia"],
@@ -750,6 +770,9 @@ const SEARCH_SYNONYMS = {
   "reparo": ["reparaca"],
   "celular": ["eletroeletronico", "telecomunicac"],
   "eletrodomestico": ["eletroeletronico"],
+  "corretor": ["corretagem"],
+  "corretora": ["corretagem"],
+  "seguradora": ["seguros"],
 };
 
 // Tolera plural simples (consultas -> consulta) tirando um "s"/"es" final
